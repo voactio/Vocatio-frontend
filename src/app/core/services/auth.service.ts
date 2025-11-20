@@ -93,6 +93,7 @@ export class AuthService {
   }*/
 
   // LOGOUT
+  /*
   logout(): void {
     this.storage.removeItem('token');
     this.storage.removeItem('user');
@@ -101,18 +102,18 @@ export class AuthService {
     this._token.set(null);
     this.router.navigate(['/login']);
   }
-  /*
+  */
   logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     this._currentUser.set(null);
+    this._isAuthenticated.set(false);
+    this.router.navigate(['/login']);
   }
-  */
 
   // Guardar data de autenticacion
   private saveAuthData(response: AuthResponse): void {
-    this.storage.setItem('token', response.token);
-    this._token.set(response.token);
+    localStorage.setItem('authToken', response.token);
 
     // AuthResponse incluye role si viene del backend
     const user: UserResponse = {
@@ -126,19 +127,20 @@ export class AuthService {
       urlImagenPerfil: response.urlImagenPerfil
     };
 
-    this.storage.setItem('user', user);
+    localStorage.setItem('authUser', JSON.stringify(user));
+
     this._currentUser.set(user);
     this._isAuthenticated.set(true);
   }
   // Cargar data de autenticacion
   private loadAuthData(): void {
-    const token = this.storage.getItem<string>('token');
-    const user = this.storage.getItem<UserResponse>('user');
+    const token = localStorage.getItem('authToken');
+    const userStr = localStorage.getItem('authUser');
 
-    if (token && user) {
-      this._token.set(token);
-      this._currentUser.set(user);
-      this._isAuthenticated.set(true);
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+        this._currentUser.set(user);
+        this._isAuthenticated.set(true);
     }
   }
 

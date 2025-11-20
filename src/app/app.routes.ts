@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { landingLayoutComponent } from './shared/layouts/landing-layout';
 import { authLayoutComponent } from './shared/layouts/auth-layout';
+import { TestVocacionalComponent } from './shared/components/test-vocacional/test-vocacional';
 
 export const routes: Routes = [
 
@@ -37,11 +38,17 @@ export const routes: Routes = [
         path: 'perfil',
         loadChildren: () =>
           import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES)
-      }
+      } 
     ]
+  },
+  { 
+    path: 'test-vocacional', 
+    component: TestVocacionalComponent,
+    canActivate: [authGuard] 
   },
 
   // DEFAULT & 404
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }
 ];
+
