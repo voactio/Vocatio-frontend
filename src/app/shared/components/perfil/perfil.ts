@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -32,6 +33,17 @@ import { CommonModule } from '@angular/common';
 
     <div *ngIf="mensaje" style="color: green;">{{ mensaje }}</div>
     <div *ngIf="error" style="color: red;">{{ error }}</div>
+
+    <hr>
+
+    <!-- BOTÓN PARA IR AL TEST VOCACIONAL -->
+    <button (click)="irAlTestVocacional()" class="btn-test">
+      Ir al Test Vocacional
+    </button>
+    <!-- BOTÓN PARA CERRAR SESION -->
+    <button (click)="cerrarSesion()" class="btn-logout">
+      Cerrar sesión
+    </button>
   `,
   styleUrl: './perfil.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +52,7 @@ export class PerfilComponent {
   private fb = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   mensaje = '';
   error = '';
@@ -91,4 +104,14 @@ export class PerfilComponent {
       }
     });
   }
+
+  irAlTestVocacional() {
+    this.router.navigate(['/test-vocacional']);
+  }
+
+  cerrarSesion() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
 }
