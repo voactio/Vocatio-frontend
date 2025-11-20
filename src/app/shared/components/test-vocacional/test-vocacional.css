@@ -168,3 +168,71 @@ h3 {
   background-color: #fff;
 }
 
+/* --- Vista de Resultados --- */
+.resultados { text-align: left; }
+.resultados h2 { text-align: center; margin-bottom: 0.5rem; }
+.subtitulo { text-align: center; color: #666; margin-bottom: 3rem; }
+
+.grafico-container {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.grafico-barras { display: flex; flex-direction: column; gap: 15px; }
+
+.barra-item { display: flex; align-items: center; }
+.barra-label { width: 110px; font-weight: 600; font-size: 0.9rem; color: #555; }
+.barra-track { flex-grow: 1; height: 10px; background: #e9ecef; border-radius: 5px; margin: 0 15px; }
+.barra-fill { height: 100%; background: #007bff; border-radius: 5px; }
+.barra-valor { width: 40px; font-weight: 700; color: #007bff; text-align: right; }
+
+.ranking-container { display: flex; flex-direction: column; gap: 15px; }
+
+.carrera-card {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+
+.carrera-card:hover {
+  border-color: #007bff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transform: translateY(-3px);
+}
+
+.rank-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e0e0e0;
+  margin-right: 1.5rem;
+}
+
+.carrera-card:first-child .rank-number { color: #ffc107; /* Oro */ }
+
+.carrera-info h4 { margin: 0 0 5px 0; color: #333; font-size: 1.1rem; }
+.carrera-info p { margin: 0; font-size: 0.9rem; color: #666; }
+.tag {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #007bff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 8px;
+}
+
+.match-badge {
+  margin-left: auto;
+  background: #d4edda;
+  color: #155724;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
