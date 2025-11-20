@@ -117,7 +117,7 @@ export class AuthService {
 
     // AuthResponse incluye role si viene del backend
     const user: UserResponse = {
-      id: response.id, // No disponible desde AuthResponse
+      id: response.id,
       correo: response.correo,
       nombre: response.nombre,
       role: response.role || RoleType.ROLE_USER, // Usar el role del response o ROLE_USER por defecto

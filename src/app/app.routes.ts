@@ -1,23 +1,54 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './shared/components/login/login';
-import { RegisterComponent } from './shared/components/register/register';
-import { PerfilComponent } from './shared/components/perfil/perfil';
-import { TestVocacionalComponent } from './shared/components/test-vocacional/test-vocacional';
 import { authGuard } from './core/guards/auth.guard';
+import { landingLayoutComponent } from './shared/layouts/landing-layout';
+import { authLayoutComponent } from './shared/layouts/auth-layout';
+import { TestVocacionalComponent } from './shared/components/test-vocacional/test-vocacional';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  
-  { 
-    path: 'perfil', 
-    component: PerfilComponent,
-    canActivate: [authGuard] 
+
+  // ============================
+  // Landing layout (público)
+  // ============================
+  {
+    path: '',
+    component: landingLayoutComponent,
+    children: [
+      {
+        path: 'login',
+        loadChildren: () =>
+          import('./features/login/login.routes').then(m => m.LOGIN_ROUTES)
+      },
+      {
+        path: 'register',
+        loadChildren: () =>
+          import('./features/register/register.routes').then(m => m.REGISTER_ROUTES)
+      }
+    ]
+  },
+
+  // ============================
+  // Auth layout (privado)
+  // ============================
+  {
+    path: '',
+    component: authLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'perfil',
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES)
+      } 
+    ]
   },
   { 
     path: 'test-vocacional', 
     component: TestVocacionalComponent,
     canActivate: [authGuard] 
-  }
+  },
+
+  // DEFAULT & 404
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];
+

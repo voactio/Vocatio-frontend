@@ -23,6 +23,13 @@ import { Router } from '@angular/router';
           Ingresar
         </button>
 
+        <button
+          type="button"
+          class="btn btn-primary w-100 mt-3"
+          (click)="goToRegister()">
+          Registrarme
+        </button>
+
       </form>
     </div>
   `,
@@ -48,11 +55,17 @@ export class LoginComponent {
     };
 
     this.authService.loginUser(req).subscribe({
-      next: resp => {
-        console.log("LOGIN OK", resp);
-        this.router.navigate(['/test-vocacional']); 
-      },
+      next: resp =>
+        {
+          console.log("LOGIN OK", resp);
+          this.router.navigate(['/profile']);
+        },
+
       error: err => console.error("ERROR LOGIN", err)
     });
+  }
+
+  goToRegister(){
+    this.router.navigate(['/auth/register']);
   }
 }
