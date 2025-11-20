@@ -44,8 +44,42 @@ import { Router } from '@angular/router';
       <div *ngIf="estado() === 'FINALIZADO'" class="card final">
         <h2>¡Excelente Trabajo!</h2>
         <p>Has completado todas las preguntas del test.</p>
-        <button class="btn-primary">Ver mis Resultados</button>
+        <button (click)="verResultados()" class="btn-primary">Ver mis Resultados</button>
       </div>
+
+      <div *ngIf="estado() === 'RESULTADOS' && resultadosActuales()" class="card resultados">
+        <h2>Tus Resultados</h2>
+        <p class="subtitulo">Basado en tus respuestas, este es tu perfil profesional:</p>
+
+        <div class="grafico-container">
+          <h3>Perfil de Intereses (RIASEC)</h3>
+          <div class="grafico-barras">
+            <div *ngFor="let item of resultadosActuales()!.graficoIntereses.puntajes | keyvalue" class="barra-item">
+              <div class="barra-label">{{ item.key }}</div>
+              <div class="barra-track">
+                <div class="barra-fill" [style.width.%]="(item.value * 10)"></div> 
+              </div>
+              <div class="barra-valor">{{ item.value }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ranking-container">
+          <h3>Carreras Recomendadas</h3>
+          <div class="carrera-card" *ngFor="let carrera of resultadosActuales()!.rankingCarreras; let i = index">
+            <div class="rank-number">#{{ i + 1 }}</div>
+            <div class="carrera-info">
+              <h4>{{ carrera.nombre }}</h4>
+              <p>{{ carrera.descripcion }}</p>
+              <span class="tag">{{ carrera.areaInteres }}</span>
+            </div>
+            <div class="match-badge">{{ carrera.porcentajeCompatibilidad }}% Compatible</div>
+          </div>
+        </div>
+        
+        <button (click)="reiniciarTest()" class="btn-secondary">Realizar Nuevo Test</button>
+      </div>
+
     </div>
   `,
   styleUrl: './test-vocacional.css'
@@ -99,6 +133,27 @@ export class TestVocacionalComponent {
         },
         error: (err) => console.error('Error enviando respuesta', err)
       });
+  }
+
+  verResultados() {
+    const currentSession = this.sessionId();
+    if (!currentSession) return;
+
+    this.testService.obtenerResultados(currentSession).subscribe({
+      next: (resultados) => {
+        console.log('Resultados:', resultados);
+        this.resultadosActuales.set(resultados);
+        this.estado.set('RESULTADOS');
+      },
+      error: (err) => console.error('Error obteniendo resultados', err)
+    });
+  }
+
+  reiniciarTest() {
+    this.estado.set('INICIO');
+    this.sessionId.set(null);
+    this.preguntaActual.set(null);
+    this.resultadosActuales.set(null);
   }
 
   calcularPorcentaje() {
