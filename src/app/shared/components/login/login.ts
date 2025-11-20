@@ -58,7 +58,7 @@ export class LoginComponent {
       next: resp =>
         {
           console.log("LOGIN OK", resp);
-          this.router.navigate(['/profile']);
+          this.router.navigate(['/perfil']);
         },
 
       error: err => console.error("ERROR LOGIN", err)
@@ -66,6 +66,6 @@ export class LoginComponent {
   }
 
   goToRegister(){
-    this.router.navigate(['/auth/register']);
+    this.router.navigate(['/register']);
   }
 }

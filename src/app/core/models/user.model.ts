@@ -44,8 +44,8 @@ export interface UserResponse {
   id: string;
   correo: string;
   nombre: string;
-  role: RoleType;
-  active: boolean;
+  role?: RoleType;
+  active?: boolean;
   nivelEducativo: string;
   carreraId: number;
   urlImagenPerfil: string;

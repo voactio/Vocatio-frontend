@@ -56,26 +56,26 @@ export class RegisterComponent {
   });
 
   onSubmit() {
-  if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) return;
 
-  const req: RegisterRequest = {
-    nombre: this.registerForm.value.nombre ?? '',
-    correo: this.registerForm.value.correo ?? '',
-    contrasena: this.registerForm.value.contrasena ?? '',
-    nivelEducativo: this.registerForm.value.nivelEducativo ?? '',
-    // opcionales
-    urlImagenPerfil: (this.registerForm.value.urlImagenPerfil &&
-      this.registerForm.value.urlImagenPerfil !== '') ?
-      this.registerForm.value.urlImagenPerfil : undefined,
-      carreraId: this.registerForm.value.carreraId ?? undefined
-  };
+    const req: RegisterRequest = {
+      nombre: this.registerForm.value.nombre ?? '',
+      correo: this.registerForm.value.correo ?? '',
+      contrasena: this.registerForm.value.contrasena ?? '',
+      nivelEducativo: this.registerForm.value.nivelEducativo ?? '',
+      // opcionales
+      urlImagenPerfil: (this.registerForm.value.urlImagenPerfil &&
+        this.registerForm.value.urlImagenPerfil !== '') ?
+        this.registerForm.value.urlImagenPerfil : undefined,
+        carreraId: this.registerForm.value.carreraId ?? undefined
+    };
 
-  this.authService.register(req).subscribe({
+    this.authService.register(req).subscribe({
       next: resp => {
         console.log("REGISTRO OK", resp);
-        this.router.navigate(['/test-vocacional']); 
+        this.router.navigate(['/login']);
       },
       error: err => console.error("ERROR REGISTRO", err)
     });
-}
+  }
 }

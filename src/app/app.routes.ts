@@ -14,6 +14,11 @@ export const routes: Routes = [
     component: landingLayoutComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      },
+      {
         path: 'login',
         loadChildren: () =>
           import('./features/login/login.routes').then(m => m.LOGIN_ROUTES)
@@ -38,17 +43,16 @@ export const routes: Routes = [
         path: 'perfil',
         loadChildren: () =>
           import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES)
-      } 
+      }
     ]
   },
-  { 
-    path: 'test-vocacional', 
+  {
+    path: 'test-vocacional',
     component: TestVocacionalComponent,
-    canActivate: [authGuard] 
+    canActivate: [authGuard]
   },
 
   // DEFAULT & 404
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }
 ];
 
