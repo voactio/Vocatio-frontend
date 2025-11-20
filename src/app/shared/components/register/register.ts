@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -43,6 +44,7 @@ import { RegisterRequest } from '../../../core/models/user.model';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   registerForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -69,8 +71,11 @@ export class RegisterComponent {
   };
 
   this.authService.register(req).subscribe({
-    next: resp => console.log("REGISTRO OK", resp),
-    error: err => console.error("ERROR REGISTRO", err)
-  });
+      next: resp => {
+        console.log("REGISTRO OK", resp);
+        this.router.navigate(['/test-vocacional']); 
+      },
+      error: err => console.error("ERROR REGISTRO", err)
+    });
 }
 }
