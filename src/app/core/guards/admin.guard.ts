@@ -10,7 +10,11 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated() && authService.isAdmin()) {
+  // Falta habilitar una opcion de admin
+  // Prioridad baja en la funcionalidad
+
+  //if (authService.isAuthenticated() && authService.isAdmin()) {
+  if (authService.isAuthenticated()) {
     return true;
   }
 
