@@ -1,15 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { LoginComponent } from './shared/components/login/login';
-import { RegisterComponent } from './shared/components/register/register';
-import { PerfilComponent } from './shared/components/perfil/perfil';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [LoginComponent, RegisterComponent, PerfilComponent],
+  imports: [RouterOutlet],
   template: `
-    <app-login/>
-    <app-register/>
-    <app-perfil/>
+    <router-outlet></router-outlet>
   `
   ,
   styleUrl: './app.css'

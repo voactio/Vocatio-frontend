@@ -30,7 +30,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './restablecer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Restablecer {
+export class RestablecerComponent {
   token!: string;
   tokenValido = false;
   mensaje: string | null = null;

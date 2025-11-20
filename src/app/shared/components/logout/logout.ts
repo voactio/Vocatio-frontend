@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logout',
@@ -16,11 +17,11 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class LogoutComponent {
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   onLogout() {
     this.authService.logout();
     console.log('Sesión cerrada');
-    // Aqui se debe agregar navegación, por ejemplo:
-    // this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth/login'])
   }
 }

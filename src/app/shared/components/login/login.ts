@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,13 @@ import { LoginRequest } from '../../../core/models/user.model';
           Ingresar
         </button>
 
+        <button
+          type="button"
+          class="btn btn-primary w-100 mt-3"
+          (click)="goToRegister()">
+          Registrarme
+        </button>
+
       </form>
     </div>
   `,
@@ -31,6 +39,7 @@ import { LoginRequest } from '../../../core/models/user.model';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   loginForm = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -46,8 +55,16 @@ export class LoginComponent {
     };
 
     this.authService.loginUser(req).subscribe({
-      next: resp => console.log("LOGIN OK", resp),
+      next: resp =>
+        {
+          console.log("LOGIN OK", resp);
+          this.router.navigate(['/profile']);
+        },
       error: err => console.error("ERROR LOGIN", err)
     });
+  }
+
+  goToRegister(){
+    this.router.navigate(['/auth/register']);
   }
 }
