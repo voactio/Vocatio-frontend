@@ -1,22 +1,126 @@
-:host {
-  display: block;
+/* Fuente global */
+* {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
 }
 
 .register-container {
-  width: 320px;
-  margin: auto;
-  padding: 16px;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #f5f7fb;
+}
+
+/* Card */
+.register-card {
+  width: 100%;
+  max-width: 430px;
+  background: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+/* Header */
+.register-header {
+  margin-bottom: 2rem;
+}
+
+.logo-icon {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #3a74d9;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.register-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.register-header p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Formulario */
+.register-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+/* Inputs */
+.form-group {
+  width: 85%;
+  text-align: left;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #333;
 }
 
 input {
   width: 100%;
-  margin-bottom: 12px;
-  padding: 8px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  transition: 0.2s;
 }
 
-button {
-  width: 100%;
-  padding: 10px;
+input:focus {
+  outline: none;
+  border-color: #4e8cff;
+  box-shadow: 0 0 0 3px rgba(78,140,255,0.2);
+}
+
+/* Botones */
+.btn-primary,
+.btn-secondary {
+  width: 85%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary {
+  background: #4e8cff;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #3a74d9;
+  transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+  background: #aac4fb;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e6e6e6;
 }
