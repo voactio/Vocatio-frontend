@@ -1,0 +1,173 @@
+/* Container */
+.detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Back Link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--primary-color);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.back-link:hover .arrow {
+  transform: translateX(-3px);
+}
+
+/* Header Section */
+.detail-header {
+  margin-bottom: 4rem;
+}
+
+.detail-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge-modalidad {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.badge-duracion {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.badge-salario {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.detail-description {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--text-main);
+  max-width: 65ch;
+}
+
+/* Testimonios */
+.testimonios-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 4rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2rem;
+}
+
+.empty-testimonios {
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 2rem;
+  background: var(--secondary-color);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.testimonios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.testimonio-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.testimonio-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.testimonio-content {
+  margin-bottom: 1.5rem;
+}
+
+.testimonio-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-main);
+  font-style: italic;
+}
+
+.testimonio-footer {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Loading/Error */
+.loading-container {
+  text-align: center;
+  padding: 4rem;
+}
+
+.loading-text {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detail-title {
+    font-size: 2rem;
+  }
+  
+  .detail-container {
+    padding: 2rem 1rem;
+  }
+}
+

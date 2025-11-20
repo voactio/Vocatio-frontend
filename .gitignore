@@ -1,0 +1,12 @@
+# Dependency directories
+/node_modules
+
+# Angular build/cache files
+/dist
+.angular/cache
+/tmp
+
+# Lock file
+# Generalmente se rastrea, pero algunos proyectos lo ignoran si usan yarn.
+# Por ahora, es mejor ignorarlo para evitar advertencias si no es crucial.
+# package-lock.json

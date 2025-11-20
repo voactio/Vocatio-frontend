@@ -1,0 +1,95 @@
+<div class="main-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1 class="title">Descubre tu Vocación</h1>
+      <p class="subtitle">Explora nuestro catálogo académico y encuentra el camino profesional ideal para ti.</p>
+    </div>
+  </header>
+
+  <!-- Filtros -->
+  <section class="filters-section">
+    <form [formGroup]="filterForm" (ngSubmit)="filtrar()" class="filters-form">
+      <div class="input-group search-group">
+        <div class="input-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="nombre" 
+            formControlName="nombre" 
+            placeholder="Buscar carrera..."
+          >
+        </div>
+      </div>
+
+      <div class="input-group select-group">
+        <div class="select-wrapper">
+          <select id="modalidad" formControlName="modalidad">
+            <option value="">Todas las modalidades</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+            <option value="Hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions-group">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="button" (click)="limpiarFiltros()" class="btn btn-text">Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Listado -->
+  <section class="results-section">
+    <div class="grid-container">
+      <article *ngFor="let carrera of carreras" class="card">
+        <div class="card-header">
+          <!-- Modality removed as it is not available in CarreraCardResponse -->
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">{{ carrera.nombre }}</h2>
+          <p class="card-description">
+            {{ carrera.descripcionCorta || 'Formación integral para desarrollar competencias profesionales de alto nivel.' }}
+          </p>
+        </div>
+        <div class="card-footer">
+          <a [routerLink]="['/carreras', carrera.id]" class="btn-link">
+            Ver detalles
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- Estado Vacío -->
+    <div *ngIf="carreras.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3>No se encontraron resultados</h3>
+      <p>Intenta con otros términos de búsqueda o limpia los filtros.</p>
+      <button (click)="limpiarFiltros()" class="btn btn-secondary mt-4">Ver todas las carreras</button>
+    </div>
+  </section>
+
+  <!-- Paginación -->
+  <div class="pagination-container" *ngIf="carreras.length > 0">
+    <button (click)="anteriorPagina()" [disabled]="page === 0" class="btn-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <span class="page-indicator">{{ page + 1 }}</span>
+    <button (click)="siguientePagina()" class="btn-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="detail-container" *ngIf="carrera; else loadingTpl">
+  <a routerLink="/carreras" class="back-link">
+    <span class="arrow">&larr;</span> Volver al listado
+  </a>
+
+  <!-- Encabezado -->
+  <div class="detail-header">
+    <h1 class="detail-title">{{ carrera.nombre }}</h1>
+    <div class="badges-container">
+      <span class="badge badge-modalidad">{{ carrera.modalidad }}</span>
+      <span class="badge badge-duracion">{{ carrera.duracionAnios }} Años</span>
+      <span class="badge badge-salario">Salario: {{ carrera.rangoSalarioPromedio }}</span>
+    </div>
+    <div class="detail-description">
+      <p>{{ carrera.descripcion }}</p>
+    </div>
+  </div>
+
+  <!-- Testimonios -->
+  <div class="testimonios-section">
+    <h2 class="section-title">Testimonios de Estudiantes</h2>
+    
+    <div *ngIf="testimonios.length === 0" class="empty-testimonios">
+      No hay testimonios registrados para esta carrera aún.
+    </div>
+
+    <div class="testimonios-grid">
+      <div *ngFor="let test of testimonios" class="testimonio-card">
+        <div class="testimonio-content">
+          <p>"{{ test.textoTestimonio }}"</p>
+        </div>
+        <div class="testimonio-footer">
+          Publicado el {{ test.creadoEn | date:'mediumDate' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-container">
+    <p *ngIf="!error" class="loading-text">Cargando información...</p>
+    <p *ngIf="error" class="error-text">{{ error }}</p>
+  </div>
+</ng-template>
