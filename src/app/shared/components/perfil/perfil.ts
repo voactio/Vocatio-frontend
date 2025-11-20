@@ -9,6 +9,72 @@ import { Router } from '@angular/router';
   selector: 'app-perfil',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
+    <div class="perfil-container">
+
+    <div class="perfil-card">
+
+      <div class="perfil-header">
+        <div class="logo-icon">🧳</div>
+        <h1 class="app-title">VOCATIO</h1>
+        <h2>Mi Perfil</h2>
+
+        <!-- Foto de perfil circular -->
+        <div class="profile-image" *ngIf="perfilForm.value.urlImagenPerfil">
+          <img [src]="perfilForm.value.urlImagenPerfil" alt="Foto de perfil">
+        </div>
+      </div>
+
+      <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()" class="perfil-form">
+
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" formControlName="nombre" />
+        </div>
+
+        <div class="form-group">
+          <label>Nivel Educativo</label>
+          <input type="text" formControlName="nivelEducativo" />
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña (opcional)</label>
+          <input type="password" formControlName="contrasena" placeholder="********" />
+        </div>
+
+        <div class="form-group">
+          <label>Carrera ID</label>
+          <input type="number" formControlName="carreraId" />
+        </div>
+
+        <div class="form-group">
+          <label>URL Imagen Perfil</label>
+          <input type="text" formControlName="urlImagenPerfil" />
+        </div>
+
+        <button class="btn-primary" type="submit" [disabled]="perfilForm.invalid">
+          Guardar Cambios
+        </button>
+
+        <div class="message success" *ngIf="mensaje">{{ mensaje }}</div>
+        <div class="message error" *ngIf="error">{{ error }}</div>
+
+      </form>
+
+      <hr class="divider">
+
+      <button class="btn-test" (click)="irAlTestVocacional()">
+        Ir al Test Vocacional
+      </button>
+
+      <button class="btn-logout" (click)="cerrarSesion()">
+        Cerrar Sesión
+      </button>
+
+    </div>
+
+  </div>
+`,
+  /*template: `
     <h2>Mi Perfil</h2>
 
     <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
@@ -44,7 +110,7 @@ import { Router } from '@angular/router';
     <button (click)="cerrarSesion()" class="btn-logout">
       Cerrar sesión
     </button>
-  `,
+  `,*/
   styleUrl: './perfil.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -74,6 +140,8 @@ export class PerfilComponent {
       this.error = "No se pudo cargar el perfil: usuario no autenticado.";
       return;
     }
+
+    this.usuarioId = user.id;
 
     this.perfilForm.patchValue({
       nombre: user.nombre,

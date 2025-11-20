@@ -9,6 +9,61 @@ import { Router } from '@angular/router';
   imports: [ReactiveFormsModule],
   template: `
     <div class="register-container">
+
+      <div class="register-card">
+
+        <div class="register-header">
+          <div class="logo-icon">🧳</div>
+          <h1 class="app-title">VOCATIO</h1>
+          <h2>Crear Cuenta</h2>
+          <p>Completa los datos para registrarte</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" formControlName="nombre" placeholder="Tu nombre" />
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="email" formControlName="correo" placeholder="correo@ejemplo.com" />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" formControlName="contrasena" placeholder="********" />
+          </div>
+
+          <div class="form-group">
+            <label>Nivel Educativo</label>
+            <input type="text" formControlName="nivelEducativo" placeholder="Ej: Universitario" />
+          </div>
+
+          <div class="form-group">
+            <label>URL Imagen Perfil (opcional)</label>
+            <input type="text" formControlName="urlImagenPerfil" placeholder="https://..." />
+          </div>
+
+          <div class="form-group">
+            <label>ID Carrera (opcional)</label>
+            <input type="number" formControlName="carreraId" placeholder="3" />
+          </div>
+
+          <button class="btn-primary" type="submit" [disabled]="registerForm.invalid">
+            Registrarme
+          </button>
+
+          <button class="btn-secondary" (click)="goToLogin()">
+            Ya tengo una cuenta
+          </button>
+        </form>
+      </div>
+    </div>
+  `,
+  /*template: `
+    <div class="register-container">
       <h2>Crear Cuenta</h2>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -37,7 +92,7 @@ import { Router } from '@angular/router';
 
       </form>
     </div>
-  `,
+  `,*/
   styleUrl: './register.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -77,5 +132,9 @@ export class RegisterComponent {
       },
       error: err => console.error("ERROR REGISTRO", err)
     });
+  }
+
+  goToLogin(){
+    this.router.navigate(['/login']);
   }
 }

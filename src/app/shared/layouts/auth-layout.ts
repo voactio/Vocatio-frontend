@@ -8,7 +8,6 @@ import { RouterOutlet } from '@angular/router';
   imports: [CommonModule, RouterOutlet],
   template: `
     <div class="auth-container">
-      <nav>BAR/LINKS</nav>
       <router-outlet></router-outlet>
     </div>
   `,
