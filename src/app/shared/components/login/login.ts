@@ -1,3 +1,4 @@
+import { NotificationService } from './../../../core/services/notification.service';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
@@ -42,6 +43,13 @@ import { CommonModule } from '@angular/common';
             Registrarme
           </button>
 
+          <button
+            type="button"
+            class="btn-secondary full-width"
+            (click)="goToRecuperar()">
+            ¿Olvidó su contraseña?
+          </button>
+
         </form>
 
       </div>
@@ -80,6 +88,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   loginForm = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -97,15 +106,26 @@ export class LoginComponent {
     this.authService.loginUser(req).subscribe({
       next: resp =>
         {
+          this.notificationService.success(
+            '¡Bienvenido!',
+            'Inicio de sesión exitoso'
+          );
           console.log("LOGIN OK", resp);
           this.router.navigate(['/perfil']);
         },
 
-      error: err => console.error("ERROR LOGIN", err)
+      error: err => {
+        console.error("ERROR LOGIN", err);
+        this.notificationService.showHttpError(403, 'Correo y/o contraseña incorrectos.');
+      }
     });
   }
 
   goToRegister(){
     this.router.navigate(['/register']);
+  }
+
+  goToRecuperar(){
+    this.router.navigate(['recuperacion/olvido'])
   }
 }

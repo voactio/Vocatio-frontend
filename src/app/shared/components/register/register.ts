@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/user.model';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -100,6 +101,8 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
 
   registerForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -128,9 +131,18 @@ export class RegisterComponent {
     this.authService.register(req).subscribe({
       next: resp => {
         console.log("REGISTRO OK", resp);
+        this.notificationService.success(
+          'Éxito',
+          'Usuario registrado correctamente.'
+        );
         this.router.navigate(['/login']);
       },
-      error: err => console.error("ERROR REGISTRO", err)
+      error: err => {
+        console.error("ERROR REGISTRO", err)
+        this.notificationService.showHttpError(
+          400,
+          "La contraseña debe tener almenos 8 caracteres e incluir letras y números");
+        }
     });
   }
 

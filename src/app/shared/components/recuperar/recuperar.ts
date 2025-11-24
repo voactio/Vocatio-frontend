@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+/*import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RecuperacionService } from '../../../core/services/recuperacion.service';
 import { CommonModule } from '@angular/common';
@@ -52,3 +52,4 @@ export class RecuperarComponent {
     });
   }
 }
+*/

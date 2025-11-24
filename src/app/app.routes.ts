@@ -27,6 +27,11 @@ export const routes: Routes = [
         path: 'register',
         loadChildren: () =>
           import('./features/register/register.routes').then(m => m.REGISTER_ROUTES)
+      },
+      {
+        path: 'recuperacion',
+        loadChildren: () =>
+          import('./features/recuperacion/recuperacion.routes').then(m => m.RECUPERACION_ROUTES)
       }
     ]
   },
