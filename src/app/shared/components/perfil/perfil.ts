@@ -4,6 +4,7 @@ import { UsuarioService } from '../../../core/services/usuario.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-perfil',
@@ -54,9 +55,6 @@ import { Router } from '@angular/router';
         <button class="btn-primary" type="submit" [disabled]="perfilForm.invalid">
           Guardar Cambios
         </button>
-
-        <div class="message success" *ngIf="mensaje">{{ mensaje }}</div>
-        <div class="message error" *ngIf="error">{{ error }}</div>
 
       </form>
 
@@ -119,6 +117,8 @@ export class PerfilComponent {
   private usuarioService = inject(UsuarioService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
+
 
   mensaje = '';
   error = '';
@@ -138,6 +138,7 @@ export class PerfilComponent {
 
     if (!user || !user.id) {
       this.error = "No se pudo cargar el perfil: usuario no autenticado.";
+      this.notificationService.showHttpError(404, this.error);
       return;
     }
 
@@ -165,10 +166,16 @@ export class PerfilComponent {
       next: resp => {
         this.mensaje = "Perfil actualizado correctamente";
         this.error = "";
+        this.notificationService.success(
+            'Éxito',
+            'Perfil actualizado correctamente.'
+          );
       },
       error: err => {
         this.error = err.error?.mensaje || "Error al actualizar perfil";
         this.mensaje = "";
+        this.notificationService.showHttpError(400, this.error);
+
       }
     });
   }
@@ -179,6 +186,10 @@ export class PerfilComponent {
 
   cerrarSesion() {
     this.authService.logout();
+    this.notificationService.success(
+            '¡Hasta pronto!',
+            'Sesión cerrada correctamente.'
+          );
     this.router.navigate(['/login']);
   }
 

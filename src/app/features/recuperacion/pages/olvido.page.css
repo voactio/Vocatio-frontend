@@ -1,0 +1,24 @@
+.rec-container {
+  max-width: 380px;
+  margin: 40px auto;
+  text-align: center;
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 12px 0;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #0056d6;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .success { color: green; margin-top: 10px; }
+  .error { color: red; margin-top: 10px; }
+}

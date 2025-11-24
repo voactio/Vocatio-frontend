@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+/*import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RecuperacionService } from '../../../core/services/recuperacion.service';
@@ -88,3 +88,4 @@ export class RestablecerComponent {
       });
   }
 }
+*/
