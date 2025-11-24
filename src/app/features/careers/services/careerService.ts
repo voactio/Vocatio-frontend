@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import axiosClient from '../../../../api/axiosClient';
-import { CarreraCardResponse } from '../types/careerTypes';
+import {
+    CarreraCardResponse,
+    CarreraDetailResponse,
+    RecursoResponse,
+    TestimonioResponse,
+    UniversitiesByCareerResponse
+} from '../types/careerTypes';
 
 @Injectable({
     providedIn: 'root'
@@ -36,6 +42,48 @@ export class CareerService {
             return response.data;
         } catch (error) {
             console.error('Error filtering careers:', error);
+            throw error;
+        }
+    }
+
+    async getDetalle(id: number): Promise<CarreraDetailResponse> {
+        try {
+            const response = await axiosClient.get<CarreraDetailResponse>(`/carreras/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching career detail:', error);
+            throw error;
+        }
+    }
+
+    async getRecursos(id: number): Promise<RecursoResponse[]> {
+        try {
+            const response = await axiosClient.get<RecursoResponse[]>(`/carreras/${id}/recursos`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching career resources:', error);
+            throw error;
+        }
+    }
+
+    async getTestimonios(id: number): Promise<TestimonioResponse[]> {
+        try {
+            const response = await axiosClient.get<TestimonioResponse[]>(`/carreras/${id}/testimonios`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching career testimonials:', error);
+            throw error;
+        }
+    }
+
+    async getUniversities(idCarrera: number): Promise<UniversitiesByCareerResponse[]> {
+        try {
+            const response = await axiosClient.post<UniversitiesByCareerResponse[]>(`/carreras/${idCarrera}/universidades`, {
+                idCarrera
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching universities:', error);
             throw error;
         }
     }

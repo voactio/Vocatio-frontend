@@ -48,6 +48,11 @@ export const routes: Routes = [
         path: 'perfil',
         loadChildren: () =>
           import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES)
+      },
+      {
+        path: 'carreras',
+        loadChildren: () =>
+          import('./features/careers/careers.routes').then(m => m.CAREERS_ROUTES)
       }
     ]
   },
