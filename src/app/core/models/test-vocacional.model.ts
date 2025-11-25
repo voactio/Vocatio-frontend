@@ -24,10 +24,24 @@ export interface CarreraAfin {
 }
 
 export interface GraficoInteres {
-  puntajes: { [key: string]: number }; // Mapa dinámico ej: {"Realista": 10}
+  puntajes: { [key: string]: number };
 }
 
 export interface ResultadoTest {
   graficoIntereses: GraficoInteres;
   rankingCarreras: CarreraAfin[];
+}
+
+export interface CarreraResult {
+  id: number;
+  nombre: string;
+  areaInteres: string;
+  porcentajeCompatibilidad: number;
+}
+
+export interface TestHistoryItem {
+  idResultado: number;
+  fecha: string;
+  intento: number;
+  topCarreras: CarreraResult[];
 }

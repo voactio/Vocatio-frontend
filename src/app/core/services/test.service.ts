@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment'; // Asegúrate de tener esto
 import { Observable } from 'rxjs';
 import { StartTestResponse, Pregunta, ResultadoTest } from '../models/test-vocacional.model';
+import { TestHistoryItem } from '../models/test-vocacional.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class TestService {
   // 3. Obtener Resultados (Backend espera GET /sessions/{sessionId}/results)
   obtenerResultados(sessionId: number): Observable<ResultadoTest> {
     return this.http.get<ResultadoTest>(`${this.apiUrl}/sessions/${sessionId}/results`);
+  }
+
+  // GET /tests/historial
+  getHistorial(): Observable<TestHistoryItem[]> {
+    return this.http.get<TestHistoryItem[]>(`${this.apiUrl}/historial`);
   }
 }
