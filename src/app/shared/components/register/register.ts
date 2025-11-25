@@ -69,37 +69,6 @@ import { finalize } from 'rxjs';
       </div>
     </div>
   `,
-  /*template: `
-    <div class="register-container">
-      <h2>Crear Cuenta</h2>
-
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-        <label>Nombre</label>
-        <input type="text" formControlName="nombre" placeholder="Tu nombre"/>
-
-        <label>Correo</label>
-        <input type="email" formControlName="correo" placeholder="correo@ejemplo.com"/>
-
-        <label>Contraseña</label>
-        <input type="password" formControlName="contrasena" placeholder="********"/>
-
-        <label>Nivel educativo</label>
-        <input type="text" formControlName="nivelEducativo"/>
-
-        <label>URL Imagen Perfil (opcional)</label>
-        <input type="text" formControlName="urlImagenPerfil"/>
-
-        <label>ID Carrera (opcional)</label>
-        <input type="number" formControlName="carreraId"/>
-
-        <button type="submit" [disabled]="registerForm.invalid">
-          Registrarme
-        </button>
-
-      </form>
-    </div>
-  `,*/
   styleUrl: './register.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -118,7 +87,7 @@ export class RegisterComponent {
   registerForm = this.fb.group({
     nombre: ['', Validators.required],
     correo: ['', [Validators.required, Validators.email]],
-    contrasena: ['', [Validators.required, Validators.minLength(8)]],
+    contrasena: ['', [Validators.required]],
     nivelEducativo: ['', Validators.required],
     urlImagenPerfil: [''],
     carreraId: [null]
@@ -145,40 +114,57 @@ export class RegisterComponent {
   }
 
   onSubmit() {
+    console.log('Formulario válido:', this.registerForm.valid);
+    console.log('Valores:', this.registerForm.value);
     if (this.registerForm.invalid) return;
 
     this.submitting = true;
 
     const carreraIdValue = this.registerForm.value.carreraId;
-    const carreraIdNumber = carreraIdValue === null ? undefined : Number(carreraIdValue);
+    const carreraIdNumber = carreraIdValue ? Number(carreraIdValue) : undefined;
 
-    const req: RegisterRequest = {
+    let req: RegisterRequest = {
       nombre: this.registerForm.value.nombre ?? '',
       correo: this.registerForm.value.correo ?? '',
       contrasena: this.registerForm.value.contrasena ?? '',
       nivelEducativo: this.registerForm.value.nivelEducativo ?? '',
-      // opcionales
-      urlImagenPerfil: (this.registerForm.value.urlImagenPerfil &&
-        this.registerForm.value.urlImagenPerfil !== '') ?
-        this.registerForm.value.urlImagenPerfil : undefined,
-      carreraId: carreraIdNumber
     };
 
-    this.authService.register(req).pipe(finalize(()=>this.submitting = false)).subscribe({
-      next: resp => {
-        console.log("REGISTRO OK", resp);
-        this.notificationService.success(
-          'Éxito',
-          'Usuario registrado correctamente.'
-        );
-        this.router.navigate(['/home']);
-      },
-      error: err => {
-        console.error("ERROR REGISTRO", err)
-        this.notificationService.showHttpError(
-          400,
-          "La contraseña debe tener almenos 8 caracteres e incluir letras y números");
-        }
+    // opcionales
+    if (this.registerForm.value.urlImagenPerfil && this.registerForm.value.urlImagenPerfil.trim() !== '') {
+      req.urlImagenPerfil = this.registerForm.value.urlImagenPerfil;
+    }
+    if (carreraIdNumber !== undefined) {
+      req.carreraId = carreraIdNumber;
+    }
+
+    Object.keys(req).forEach(key => {
+      if (req[key as keyof RegisterRequest] === null || req[key as keyof RegisterRequest] === '') {
+        delete req[key as keyof RegisterRequest];
+      }
+    });
+
+    console.log('Payload final:', req);
+
+
+
+    this.authService.register(req)
+      .pipe(finalize(()=>this.submitting = false))
+      .subscribe({
+        next: resp => {
+          console.log("REGISTRO OK", resp);
+          this.notificationService.success(
+            'Éxito',
+            'Usuario registrado correctamente.'
+          );
+          this.router.navigate(['/home']);
+        },
+        error: err => {
+          console.error("ERROR REGISTRO", err)
+          this.notificationService.showHttpError(
+            400,
+            "La contraseña debe tener almenos 8 caracteres e incluir letras y números");
+          }
     });
   }
 
