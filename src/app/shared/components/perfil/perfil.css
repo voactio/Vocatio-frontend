@@ -431,13 +431,15 @@ input:focus {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/*
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
   margin-top: 6px;
-}
+}*/
 
 /* Guardar */
 .btn-primary {
@@ -497,4 +499,12 @@ input:focus {
   border: none;
   height: 1px;
   background: #ddd;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
 }
