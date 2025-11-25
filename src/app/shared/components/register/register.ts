@@ -4,10 +4,14 @@ import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/user.model';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
+import { CommonModule } from '@angular/common';
+import { CarreraOptionService } from '../../../core/services/carreraoption.service';
+import { CarreraOption } from '../../../core/models/carreraoption.model';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   template: `
     <div class="register-container">
 
@@ -48,8 +52,13 @@ import { NotificationService } from '../../../core/services/notification.service
           </div>
 
           <div class="form-group">
-            <label>ID Carrera (opcional)</label>
-            <input type="number" formControlName="carreraId" placeholder="3" />
+            <label>Carrera (opcional)</label>
+            <select formControlName="carreraId">
+              <option [ngValue]="null">-- Seleccionar carrera (opcional) --</option>
+              <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
+            </select>
+
+            <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
           </div>
 
           <button class="btn-primary" type="submit" [disabled]="registerForm.invalid">
@@ -102,6 +111,11 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private carreraOptService = inject(CarreraOptionService);
+
+  carreras: CarreraOption[] = [];
+  cargandoCarreras = false;
+  submitting = false;
 
 
   registerForm = this.fb.group({
@@ -113,8 +127,33 @@ export class RegisterComponent {
     carreraId: [null]
   });
 
+  ngOnInit() {
+    this.loadCarreras();
+  }
+
+  private loadCarreras(){
+    this.cargandoCarreras = true;
+    this.carreraOptService.getOpciones()
+    .pipe(finalize(()=>this.cargandoCarreras = false))
+    .subscribe({
+      next: data=> this.carreras = data,
+      error: err=> {
+        console.error('Error cargando las carreras', err);
+        this.notificationService.showHttpError(
+          503,
+          'No se pudieron cargar las carreras. Intenta más tarde.'
+        );
+      }
+    })
+  }
+
   onSubmit() {
     if (this.registerForm.invalid) return;
+
+    this.submitting = true;
+
+    const carreraIdValue = this.registerForm.value.carreraId;
+    const carreraIdNumber = carreraIdValue === null ? undefined : Number(carreraIdValue);
 
     const req: RegisterRequest = {
       nombre: this.registerForm.value.nombre ?? '',
@@ -125,10 +164,10 @@ export class RegisterComponent {
       urlImagenPerfil: (this.registerForm.value.urlImagenPerfil &&
         this.registerForm.value.urlImagenPerfil !== '') ?
         this.registerForm.value.urlImagenPerfil : undefined,
-        carreraId: this.registerForm.value.carreraId ?? undefined
+      carreraId: carreraIdNumber
     };
 
-    this.authService.register(req).subscribe({
+    this.authService.register(req).pipe(finalize(()=>this.submitting = false)).subscribe({
       next: resp => {
         console.log("REGISTRO OK", resp);
         this.notificationService.success(
