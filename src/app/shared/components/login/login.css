@@ -1,0 +1,115 @@
+/* Fondo exterior (toda la vista) */
+.page-bg {
+  background-color: #2A63D3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tarjeta blanca con bordes redondeados (login-wrapper) */
+.login-wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;          /* vuelve a blanco */
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+/* Columnas */
+.login-left, .login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-left {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding-right: 20px;
+}
+
+/* Logo y título */
+.vocatio-logo {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.vocatio-title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #1a4db3; /* azul del branding dentro de la tarjeta */
+}
+
+/* Formulario */
+.login-form-container {
+  width: 90%;
+  max-width: 350px;
+}
+
+.login-form-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #333;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+/* Enlaces y botón */
+.form-links {
+  margin: 10px 0;
+  text-align: right;
+}
+
+.form-links a {
+  color: #1a4db3;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.form-links a:hover {
+  text-decoration: underline;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background-color: #1a4db3;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #17429a;
+}

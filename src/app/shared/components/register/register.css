@@ -1,0 +1,97 @@
+/* Fondo azul */
+.page-bg {
+  background-color: #2A63D3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tarjeta blanca centrada */
+.register-wrapper {
+  width: 100%;
+  max-width: 900px;
+  padding: 40px;
+}
+
+.register-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Título */
+.register-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #2A63D3;
+}
+
+/* Distribución en columnas */
+.form-columns {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.form-column {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Campos */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+/* Botón */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: #2A63D3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.btn-primary:hover {
+  background-color: #1f4db3;
+}
+
+/* Enlace inferior */
+.form-links {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.form-links a {
+  color: #2A63D3;
+  text-decoration: underline;
+  cursor: pointer;
+}
