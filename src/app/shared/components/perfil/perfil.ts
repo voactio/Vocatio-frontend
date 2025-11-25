@@ -5,6 +5,9 @@ import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
+import { CarreraOptionService } from '../../../core/services/carreraoption.service';
+import { CarreraOption } from '../../../core/models/carreraoption.model';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
@@ -43,9 +46,14 @@ import { NotificationService } from '../../../core/services/notification.service
         </div>
 
         <div class="form-group">
-          <label>Carrera ID</label>
-          <input type="number" formControlName="carreraId" />
-        </div>
+          <label>Carrera (opcional)</label>
+            <select formControlName="carreraId">
+              <option [ngValue]="null">-- Seleccionar carrera (opcional) --</option>
+              <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
+            </select>
+
+            <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
+          </div>
 
         <div class="form-group">
           <label>URL Imagen Perfil</label>
@@ -118,23 +126,28 @@ export class PerfilComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private carreraOptService = inject(CarreraOptionService);
 
-
+  carreras: CarreraOption[] = [];
+  cargandoCarreras = false;
+  submitting = false;
   mensaje = '';
   error = '';
   usuarioId!: string;
+  userData: any;
 
   perfilForm = this.fb.group({
     nombre: ['', Validators.required],
     nivelEducativo: ['', Validators.required],
     contrasena: [''],
-    carreraId: [null],
+    carreraId: [null as number | null],
     urlImagenPerfil: ['']
   });
 
   ngOnInit() {
 
     const user = this.authService.currentUser();
+    this.userData = user;
 
     if (!user || !user.id) {
       this.error = "No se pudo cargar el perfil: usuario no autenticado.";
@@ -149,16 +162,49 @@ export class PerfilComponent {
       nivelEducativo: user.nivelEducativo,
       urlImagenPerfil: user.urlImagenPerfil
     })
+
+    this.loadCarreras();
+
+  }
+
+  private loadCarreras(){
+    this.cargandoCarreras = true;
+    this.carreraOptService.getOpciones()
+    .pipe(finalize(()=>this.cargandoCarreras = false))
+    .subscribe({
+      next: data=> {
+        this.carreras = data;
+        if(this.userData?.carreraId){
+          const carreraUsuario = this.carreras.find(c => c.id === this.userData.carreraId);
+          if(carreraUsuario){
+            this.perfilForm.patchValue({
+              carreraId: carreraUsuario.id
+            });
+          }
+        }
+      },
+      error: err=> {
+        console.error('Error cargando las carreras', err);
+        this.notificationService.showHttpError(
+          503,
+          'No se pudieron cargar las carreras. Intenta más tarde.'
+        );
+      }
+    })
   }
 
   onSubmit() {
     if (this.perfilForm.invalid) return;
 
+    this.submitting = true;
+    const carreraIdValue = this.perfilForm.value.carreraId;
+    const carreraIdNumber = carreraIdValue === null ? undefined : Number(carreraIdValue);
+
     const req = {
       nombre: this.perfilForm.value.nombre!,
       nivelEducativo: this.perfilForm.value.nivelEducativo!,
       contrasena: this.perfilForm.value.contrasena || ' ',
-      carreraId: this.perfilForm.value.carreraId || undefined,
+      carreraId: carreraIdNumber,
       urlImagenPerfil: this.perfilForm.value.urlImagenPerfil || undefined
     };
 
