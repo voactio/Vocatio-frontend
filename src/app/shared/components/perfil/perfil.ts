@@ -8,10 +8,14 @@ import { NotificationService } from '../../../core/services/notification.service
 import { CarreraOptionService } from '../../../core/services/carreraoption.service';
 import { CarreraOption } from '../../../core/models/carreraoption.model';
 import { finalize } from 'rxjs';
+import { TestService } from '../../../core/services/test.service'; // IMPORTAR
+import { TestHistoryItem } from '../../../core/models/test-vocacional.model'; // IMPORTAR
+import { DatePipe } from '@angular/common';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-perfil',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DatePipe],
   template: `
     <div class="perfil-wrapper">
       <!-- Navbar -->
@@ -65,42 +69,45 @@ import { finalize } from 'rxjs';
         <!-- Contenido Principal -->
         <main class="main-content">
           @if (seccionActiva === 'resumen') {
-            <!-- Resumen del Perfil -->
             <div class="section-header">
               <h2>📊 Resumen del Perfil</h2>
             </div>
 
             <div class="stats-grid">
               <div class="stat-card">
-                <div class="stat-number">1</div>
+                <div class="stat-number">{{ historial().length }}</div>
                 <div class="stat-label">Tests Realizados</div>
               </div>
               <div class="stat-card">
-                <div class="stat-number">1</div>
-                <div class="stat-label">Carreras Favoritas</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Carreras Descartadas</div>
-              </div>
-              <div class="stat-card">
                 <div class="stat-icon">📅</div>
-                <div class="stat-number">17</div>
-                <div class="stat-label">Último Test</div>
-                <div class="stat-date">23 de septiembre de 2025</div>
+                @if (ultimoTest()) {
+                    <div class="stat-date">{{ ultimoTest()?.fecha | date:'mediumDate' }}</div>
+                    <div class="stat-label">Último Test</div>
+                } @else {
+                    <div class="stat-label">Sin actividad reciente</div>
+                }
               </div>
             </div>
 
-            <!-- Últimos Resultados -->
             <div class="section">
-              <h3>🎯 Últimos Resultados</h3>
-              <p class="section-subtitle">Top 3 carreras recomendadas:</p>
-              <div class="badges-container">
-                <span class="badge-carrera">#1 Ingeniería Industrial (64%)</span>
-                <span class="badge-carrera">#2 Ingeniería en Ciberseguridad (61%)</span>
-                <span class="badge-carrera">#3 Ingeniería de Datos (51%)</span>
-              </div>
-              <button class="btn-link" (click)="verResultadosCompletos()">Ver Resultados Completos</button>
+              <h3>🎯 Resultados del Último Test</h3>
+              
+              @if (ultimoTest(); as test) {
+                  <p class="section-subtitle">Intento #{{ test.intento }} - {{ test.fecha | date:'short' }}</p>
+                  <div class="badges-container">
+                    @for (carrera of test.topCarreras.slice(0, 3); track carrera.id; let i = $index) {
+                        <span class="badge-carrera" [class.gold]="i===0">
+                            #{{i+1}} {{ carrera.nombre }} ({{ carrera.porcentajeCompatibilidad }}%)
+                        </span>
+                    }
+                  </div>
+                  <button class="btn-link" (click)="mostrarSeccion('historial')">Ver Historial Completo</button>
+              } @else {
+                  <div class="empty-state-small">
+                    <p>Aún no has realizado ningún test vocacional.</p>
+                    <button class="btn-accion" (click)="irAlTestVocacional()">Comenzar Test</button>
+                  </div>
+              }
             </div>
 
             <!-- Carreras Favoritas -->
@@ -173,7 +180,34 @@ import { finalize } from 'rxjs';
             <div class="section-header">
               <h2>📋 Historial de Tests</h2>
             </div>
-            <p class="empty-state">No hay historial disponible aún.</p>
+            
+            @if (historial().length > 0) {
+                <div class="historial-list">
+                    @for (test of historial(); track test.idResultado) {
+                        <div class="historial-card">
+                            <div class="historial-header">
+                                <span class="historial-date">📅 {{ test.fecha | date:'longDate' }}</span>
+                                <span class="historial-badge">Intento #{{ test.intento }}</span>
+                            </div>
+                            <div class="historial-body">
+                                <h4>Top Carreras:</h4>
+                                <ul>
+                                    @for (carrera of test.topCarreras; track carrera.id) {
+                                        <li>
+                                            <strong>{{ carrera.porcentajeCompatibilidad }}%</strong> - {{ carrera.nombre }}
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else {
+                <div class="empty-state">
+                    <p>No hay historial disponible aún.</p>
+                    <button class="btn-primary" (click)="irAlTestVocacional()">Realizar mi primer test</button>
+                </div>
+            }
           }
 
           @if (seccionActiva === 'favoritas') {
@@ -199,6 +233,10 @@ export class PerfilComponent {
   private router = inject(Router);
   private notificationService = inject(NotificationService);
   private carreraOptService = inject(CarreraOptionService);
+  private testService = inject(TestService);
+
+  historial = signal<TestHistoryItem[]>([]);
+  ultimoTest = signal<TestHistoryItem | null>(null);
 
   carreras: CarreraOption[] = [];
   cargandoCarreras = false;
@@ -208,6 +246,7 @@ export class PerfilComponent {
   usuarioId!: string;
   seccionActiva: 'resumen' | 'editar' | 'historial' | 'favoritas' = 'resumen';
   userData: any;
+  
 
   perfilForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -237,7 +276,20 @@ export class PerfilComponent {
     })
 
     this.loadCarreras();
+    this.cargarHistorial();
 
+  }
+
+  cargarHistorial() {
+    this.testService.getHistorial().subscribe({
+        next: (data) => {
+            this.historial.set(data);
+            if (data.length > 0) {
+                this.ultimoTest.set(data[0]);
+            }
+        },
+        error: (err) => console.error("Error cargando historial", err)
+    });
   }
 
   private loadCarreras(){

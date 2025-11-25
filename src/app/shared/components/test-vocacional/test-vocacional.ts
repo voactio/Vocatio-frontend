@@ -83,22 +83,27 @@ import { Router } from '@angular/router';
             <p class="resultados-subtitle">Descubre las carreras que mejor se adaptan a tu perfil</p>
           </div>
 
-          <!-- Contenedor de dos columnas -->
           <div class="resultados-content">
-            <!-- Columna Izquierda: Gráfico -->
-            <div class="grafico-section">
-              <h2 class="section-title">Gráfico de Intereses</h2>
-              <div class="grafico-container">
-                <div class="grafico-placeholder">
-                  <div class="radar-chart">
-                    <!-- Aquí iría el gráfico radar RIASEC -->
-                    <p style="text-align: center; color: #2a63d3; font-weight: 600; margin-top: 100px;">
-                      Gráfico RIASEC (Radar Chart)
-                    </p>
-                  </div>
+              <div class="grafico-section">
+              <h2 class="section-title">Perfil de Intereses (RIASEC)</h2>
+              <div class="grafico-card">
+                <div class="grafico-barras">
+                  @for (item of resultadosActuales()!.graficoIntereses.puntajes | keyvalue; track item.key) {
+                    <div class="barra-row">
+                      <div class="barra-info">
+                        <span class="barra-label">{{ item.key }}</span>
+                        <span class="barra-valor">{{ item.value }} pts</span>
+                      </div>
+                      <div class="barra-track">
+                        <div class="barra-fill" 
+                             [style.width.%]="(item.value * 15) > 100 ? 100 : (item.value * 15)">
+                        </div>
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
-            </div>
+              </div>
 
             <!-- Columna Derecha: Ranking -->
             <div class="ranking-section">
