@@ -13,73 +13,177 @@ import { finalize } from 'rxjs';
   selector: 'app-perfil',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <div class="perfil-container">
-
-    <div class="perfil-card">
-
-      <div class="perfil-header">
-        <div class="logo-icon">🧳</div>
-        <h1 class="app-title">VOCATIO</h1>
-        <h2>Mi Perfil</h2>
-
-        <!-- Foto de perfil circular -->
-        <div class="profile-image" *ngIf="perfilForm.value.urlImagenPerfil">
-          <img [src]="perfilForm.value.urlImagenPerfil" alt="Foto de perfil">
+    <div class="perfil-wrapper">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar-content">
+          <div class="logo">Vocatio</div>
+          <ul class="nav-links">
+            <li><a href="/home">Inicio</a></li>
+            <li><a href="/carreras">Carreras</a></li>
+            <li><a href="/test-vocacional">Test Vocacional</a></li>
+            <li><a href="/perfil" class="active">Mi Perfil</a></li>
+          </ul>
         </div>
-      </div>
+      </nav>
 
-      <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()" class="perfil-form">
-
-        <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" formControlName="nombre" />
-        </div>
-
-        <div class="form-group">
-          <label>Nivel Educativo</label>
-          <input type="text" formControlName="nivelEducativo" />
-        </div>
-
-        <div class="form-group">
-          <label>Contraseña (opcional)</label>
-          <input type="password" formControlName="contrasena" placeholder="********" />
-        </div>
-
-        <div class="form-group">
-          <label>Carrera (opcional)</label>
-            <select formControlName="carreraId">
-              <option [ngValue]="null">-- Seleccionar carrera (opcional) --</option>
-              <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
-            </select>
-
-            <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
+      <div class="perfil-container">
+        <!-- Sidebar Izquierdo -->
+        <aside class="sidebar">
+          <div class="user-card">
+            <div class="user-avatar">
+              @if (perfilForm.value.urlImagenPerfil) {
+                <img [src]="perfilForm.value.urlImagenPerfil" alt="Foto de perfil">
+              } @else {
+                <div class="avatar-placeholder">👤</div>
+              }
+            </div>
+            <h3 class="user-name">{{ perfilForm.value.nombre || 'Usuario' }}</h3>
+            <p class="user-date">Miembro desde enero 2024</p>
           </div>
 
-        <div class="form-group">
-          <label>URL Imagen Perfil</label>
-          <input type="text" formControlName="urlImagenPerfil" />
-        </div>
+          <div class="sidebar-menu">
+            <button class="menu-btn" (click)="mostrarSeccion('editar')">
+              ✏️ Editar Perfil
+            </button>
+            <button class="menu-btn" (click)="mostrarSeccion('historial')">
+              📋 Historial de Tests
+            </button>
+            <button class="menu-btn" (click)="mostrarSeccion('favoritas')">
+              ⭐ Carreras Favoritas
+            </button>
+            <button class="menu-btn" (click)="mostrarSeccion('resumen')">
+              📊 Resumen
+            </button>
+          </div>
 
-        <button class="btn-primary" type="submit" [disabled]="perfilForm.invalid">
-          Guardar Cambios
-        </button>
+          <button class="btn-logout" (click)="cerrarSesion()">
+             Cerrar Sesión
+          </button>
+        </aside>
 
-      </form>
+        <!-- Contenido Principal -->
+        <main class="main-content">
+          @if (seccionActiva === 'resumen') {
+            <!-- Resumen del Perfil -->
+            <div class="section-header">
+              <h2>📊 Resumen del Perfil</h2>
+            </div>
 
-      <hr class="divider">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Tests Realizados</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Carreras Favoritas</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Carreras Descartadas</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-number">17</div>
+                <div class="stat-label">Último Test</div>
+                <div class="stat-date">23 de septiembre de 2025</div>
+              </div>
+            </div>
 
-      <button class="btn-test" (click)="irAlTestVocacional()">
-        Ir al Test Vocacional
-      </button>
+            <!-- Últimos Resultados -->
+            <div class="section">
+              <h3>🎯 Últimos Resultados</h3>
+              <p class="section-subtitle">Top 3 carreras recomendadas:</p>
+              <div class="badges-container">
+                <span class="badge-carrera">#1 Ingeniería Industrial (64%)</span>
+                <span class="badge-carrera">#2 Ingeniería en Ciberseguridad (61%)</span>
+                <span class="badge-carrera">#3 Ingeniería de Datos (51%)</span>
+              </div>
+              <button class="btn-link" (click)="verResultadosCompletos()">Ver Resultados Completos</button>
+            </div>
 
-      <button class="btn-logout" (click)="cerrarSesion()">
-        Cerrar Sesión
-      </button>
+            <!-- Carreras Favoritas -->
+            <div class="section">
+              <h3>⭐ Carreras Favoritas</h3>
+              <div class="carrera-favorita-card">
+                <h4 class="carrera-nombre">Ingeniería de Sistemas</h4>
+                <span class="carrera-area">DESARROLLO DE SOFTWARE</span>
+              </div>
+            </div>
 
+            <!-- Recomendaciones -->
+            <div class="section recomendaciones">
+              <h3>💡 Recomendaciones</h3>
+              <div class="recomendacion-card">
+                <div class="recomendacion-icon">🎓</div>
+                <div class="recomendacion-content">
+                  <h4>Actualiza tu test vocacional</h4>
+                  <p>Tus intereses pueden cambiar con el tiempo</p>
+                  <button class="btn-accion" (click)="irAlTestVocacional()">Nuevo Test</button>
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (seccionActiva === 'editar') {
+            <!-- Editar Perfil -->
+            <div class="section-header">
+              <h2>✏️ Editar Perfil</h2>
+            </div>
+
+            <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()" class="perfil-form">
+              <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" formControlName="nombre" />
+              </div>
+
+              <div class="form-group">
+                <label>Nivel Educativo</label>
+                <input type="text" formControlName="nivelEducativo" />
+              </div>
+
+              <div class="form-group">
+                <label>Contraseña (opcional)</label>
+                <input type="password" formControlName="contrasena" placeholder="********" />
+              </div>
+
+              <div class="form-group">
+                <label>Carrera ID</label>
+                <input type="number" formControlName="carreraId" />
+              </div>
+
+              <div class="form-group">
+                <label>URL Imagen Perfil</label>
+                <input type="text" formControlName="urlImagenPerfil" />
+              </div>
+
+              <button class="btn-primary" type="submit" [disabled]="perfilForm.invalid">
+                Guardar Cambios
+              </button>
+            </form>
+          }
+
+          @if (seccionActiva === 'historial') {
+            <div class="section-header">
+              <h2>📋 Historial de Tests</h2>
+            </div>
+            <p class="empty-state">No hay historial disponible aún.</p>
+          }
+
+          @if (seccionActiva === 'favoritas') {
+            <div class="section-header">
+              <h2>⭐ Carreras Favoritas</h2>
+            </div>
+            <div class="carrera-favorita-card">
+              <h4 class="carrera-nombre">Ingeniería de Sistemas</h4>
+              <span class="carrera-area">DESARROLLO DE SOFTWARE</span>
+            </div>
+          }
+        </main>
+      </div>
     </div>
-
-  </div>
-`,
+  `,
   /*template: `
     <h2>Mi Perfil</h2>
 
@@ -134,6 +238,7 @@ export class PerfilComponent {
   mensaje = '';
   error = '';
   usuarioId!: string;
+  seccionActiva: 'resumen' | 'editar' | 'historial' | 'favoritas' = 'resumen';
   userData: any;
 
   perfilForm = this.fb.group({
@@ -237,6 +342,14 @@ export class PerfilComponent {
             'Sesión cerrada correctamente.'
           );
     this.router.navigate(['/login']);
+  }
+
+  mostrarSeccion(seccion: 'resumen' | 'editar' | 'historial' | 'favoritas') {
+    this.seccionActiva = seccion;
+  }
+
+  verResultadosCompletos() {
+    this.router.navigate(['/test-vocacional']);
   }
 
 }

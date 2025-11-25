@@ -24,6 +24,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   ];
   const shouldIgnore = ignoredUrls.some(url => req.url.includes(url));
 
+  // RUTAS QUE NO DEBEN HACER LOGOUT AUTOMÁTICO EN 401
+  const noLogoutOn401Urls = [
+    '/testimonios',
+    '/recursos',
+    '/universidades',
+    '/tests',
+    '/sessions'
+  ];
+  const shouldNotLogoutOn401 = noLogoutOn401Urls.some(url => req.url.includes(url));
+
   if (shouldIgnore) {
     return next(req);  // NO ejecuta notificaciones ni manejo de errores
   }
@@ -47,8 +57,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Mostrar notificación toast amigable
         notificationService.showHttpError(error.status, backendMessage);
 
-        // Si el error es 401 (Unauthorized), hacer logout
-        if (error.status === 401) {
+        // Si el error es 401 (Unauthorized), hacer logout solo si NO está en la lista de exclusión
+        if (error.status === 401 && !shouldNotLogoutOn401) {
           authService.logout();
           router.navigate(['/login']);
         }

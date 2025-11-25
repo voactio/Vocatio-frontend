@@ -1,0 +1,118 @@
+<div class="carreras-container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="logo">Vocatio</div>
+      <ul class="nav-links">
+        <li><a href="/home">Inicio</a></li>
+        <li><a href="/carreras" class="active">Carreras</a></li>
+        <li><a href="/test-vocacional">Test Vocacional</a></li>
+        <li><a href="/perfil">Mi Perfil</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header Section -->
+    <section class="header-section">
+      <h1>🎓 Explorar Carreras</h1>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+      <div class="filters-container">
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Nombre de carrera..."
+            class="filter-input"
+            (keyup.enter)="onSearch()"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Modalidad</label>
+          <select [(ngModel)]="selectedModalidad" (change)="onSearch()" class="filter-select">
+            <option value="">Todas las modalidades</option>
+            <option *ngFor="let modalidad of modalidades" [value]="modalidad">
+              {{ modalidad }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Perfil RIASEC</label>
+          <select [(ngModel)]="selectedPerfil" (change)="onSearch()" class="filter-select">
+            <option value="">Todos los perfiles</option>
+            <option *ngFor="let perfil of perfilesRiasec" [value]="perfil">
+              {{ perfil }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-button-container">
+          <button class="btn-filter" (click)="onSearch()">Filtrar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando carreras...</p>
+    </div>
+
+    <!-- Carreras Grid -->
+    <section class="carreras-grid" *ngIf="!loading()">
+      <div
+        *ngFor="let carrera of carreras()"
+        class="carrera-card"
+        (click)="onCarreraClick(carrera.id)"
+      >
+        <!-- Badges -->
+        <div class="card-badges">
+          <span class="badge badge-primary" *ngIf="carrera.especializacion">
+            {{ carrera.especializacion }}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h3 class="card-title">{{ carrera.nombre }}</h3>
+
+        <!-- Description -->
+        <p class="card-description">{{ carrera.descripcionCorta }}</p>
+
+        <!-- Info -->
+        <div class="card-info">
+          <div class="info-item" *ngIf="carrera.modalidad">
+            <span class="info-label">Modalidad:</span>
+            <span class="info-value">{{ carrera.modalidad }}</span>
+          </div>
+          <div class="info-item" *ngIf="carrera.perfilRiasec">
+            <span class="info-label">Perfil RIASEC:</span>
+            <span class="info-value">{{ carrera.perfilRiasec }}</span>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="card-tags" *ngIf="carrera.tags && carrera.tags.length > 0">
+          <span class="tag" *ngFor="let tag of carrera.tags">{{ tag }}</span>
+        </div>
+
+        <!-- Button -->
+        <button class="card-button">Ver Detalle Completo</button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="carreras().length === 0" class="empty-state">
+        <div class="empty-icon"></div>
+        <h3>No se encontraron carreras</h3>
+        <p>Intenta ajustar los filtros de búsqueda</p>
+        <button class="btn-primary" (click)="clearFilters()">Ver todas las carreras</button>
+      </div>
+    </section>
+  </div>
+</div>
