@@ -13,62 +13,59 @@ import { finalize } from 'rxjs';
   selector: 'app-register',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <div class="register-container">
+    <div class="page-bg">
+      <div class="register-wrapper">
+        <div class="register-card">
+          <h2 class="register-title">Registro</h2>
 
-      <div class="register-card">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+            <div class="form-columns">
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="correo">Correo electrónico</label>
+                  <input type="email" id="correo" formControlName="correo" placeholder="Ingresar correo" />
+                </div>
 
-        <div class="register-header">
-          <div class="logo-icon">🧳</div>
-          <h1 class="app-title">VOCATIO</h1>
-          <h2>Crear Cuenta</h2>
-          <p>Completa los datos para registrarte</p>
+                <div class="form-group">
+                  <label for="contrasena">Contraseña</label>
+                  <input type="password" id="contrasena" formControlName="contrasena" placeholder="Ingresar contraseña" />
+                </div>
+
+                <div class="form-group">
+                  <label for="urlImagenPerfil">URL Imagen Perfil (opcional)</label>
+                  <input type="text" id="urlImagenPerfil" formControlName="urlImagenPerfil" placeholder="https://..." />
+                </div>
+
+              </div>
+
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="nombre">Nombre</label>
+                  <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre del usuario" />
+                </div>
+
+                <div class="form-group">
+                  <label for="nivelEducativo">Nivel educativo</label>
+                  <input type="text" id="nivelEducativo" formControlName="nivelEducativo" placeholder="Seleccionar nivel" />
+                </div>
+
+                <div class="form-group">
+                  <label for="carreraId">Carrera actual (opcional)</label>
+                  <select id="carreraId" formControlName="carreraId">
+                    <option [ngValue]="null">Seleccionar carrera</option>
+                    <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
+                  </select>
+                  <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-primary" type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+            <div class="form-links">
+              <a (click)="goToLogin()">Ya tengo una cuenta</a>
+            </div>
+          </form>
         </div>
-
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" formControlName="nombre" placeholder="Tu nombre" />
-          </div>
-
-          <div class="form-group">
-            <label>Correo</label>
-            <input type="email" formControlName="correo" placeholder="correo@ejemplo.com" />
-          </div>
-
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" formControlName="contrasena" placeholder="********" />
-          </div>
-
-          <div class="form-group">
-            <label>Nivel Educativo</label>
-            <input type="text" formControlName="nivelEducativo" placeholder="Ej: Universitario" />
-          </div>
-
-          <div class="form-group">
-            <label>URL Imagen Perfil (opcional)</label>
-            <input type="text" formControlName="urlImagenPerfil" placeholder="https://..." />
-          </div>
-
-          <div class="form-group">
-            <label>Carrera (opcional)</label>
-            <select formControlName="carreraId">
-              <option [ngValue]="null">-- Seleccionar carrera (opcional) --</option>
-              <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
-            </select>
-
-            <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
-          </div>
-
-          <button class="btn-primary" type="submit" [disabled]="registerForm.invalid">
-            Registrarme
-          </button>
-
-          <button class="btn-secondary" (click)="goToLogin()">
-            Ya tengo una cuenta
-          </button>
-        </form>
       </div>
     </div>
   `,

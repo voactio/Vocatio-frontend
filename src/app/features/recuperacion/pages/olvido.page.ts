@@ -10,18 +10,35 @@ import { NotificationService } from '../../../core/services/notification.service
   selector: 'app-olvido',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <div class="rec-container">
+    <div class="page-bg">
+      <div class="rec-wrapper">
+        <div class="rec-left">
+          <h2 class="rec-title">Recuperar contraseña</h2>
+          <p class="rec-description">
+            Se enviará un enlace de recuperación de contraseña al correo electrónico ingresado.
+          </p>
 
-      <h2>Recuperar contraseña</h2>
+          <form [formGroup]="Olvidoform" (ngSubmit)="enviarCorreo()" class="rec-form">
+            <div class="form-group">
+              <label for="correo">Correo electrónico</label>
+              <input type="email" id="correo" formControlName="correo" placeholder="tuemail@dominio.com" />
+            </div>
 
-      <form [formGroup]="Olvidoform" (ngSubmit)="enviarCorreo()">
+            <button type="submit" class="btn-primary" [disabled]="Olvidoform.invalid">
+              Enviar enlace
+            </button>
 
-        <label>Correo electrónico</label>
-        <input type="email" formControlName="correo" placeholder="tuemail@dominio.com">
+            <div class="form-links">
+              <a (click)="irAlInicio()">&lt; Regresar</a>
+            </div>
+          </form>
+        </div>
 
-        <button type="submit">Enviar correo de recuperación</button>
-      </form>
-
+        <div class="rec-right">
+          <img src="img/vocatio-logo.png" alt="Logo VOCATIO" class="vocatio-logo" />
+          <h1 class="vocatio-title">VOCATIO</h1>
+        </div>
+      </div>
     </div>
   `,
   styleUrl: './olvido.page.css',
@@ -73,4 +90,9 @@ export class OlvidoPageComponent {
       }
     });
   }
+
+  irAlInicio() {
+    this.router.navigate(['/login']);
+  }
+
 }

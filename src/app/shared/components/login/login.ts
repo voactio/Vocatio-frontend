@@ -10,48 +10,40 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <div class="login-container">
-      <div class="login-card">
-
-        <div class="login-header">
-          <div class="logo-icon">💼</div>
-          <h1 class="app-title">VOCATIO</h1>
-          <h2>Iniciar Sesión</h2>
-          <p>Bienvenido a tu cuenta</p>
+    <div class="page-bg">
+      <div class="login-wrapper">
+        <div class="login-left">
+          <img src="img/vocatio-logo.png" alt="Logo Vocatio" class="vocatio-logo" />
+          <h1 class="vocatio-title">VOCATIO</h1>
         </div>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="login-right">
+          <div class="login-form-container">
+            <h2>Inicio de sesión</h2>
 
-          <div class="form-group full-width">
-            <label>Correo electrónico</label>
-            <input type="email" formControlName="correo" placeholder="correo@ejemplo.com" class="full-width">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" formControlName="correo" placeholder="Ingresar correo" />
+              </div>
+
+              <div class="form-group">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" formControlName="contrasena" placeholder="Ingresar contraseña" />
+              </div>
+
+              <div class="form-links">
+                <a (click)="goToRecuperar()">¿Se te olvidó tu contraseña?</a>
+              </div>
+
+              <button type="submit" [disabled]="loginForm.invalid" class="btn-primary">Acceder</button>
+
+              <div class="form-links">
+                <a (click)="goToRegister()">Crear cuenta</a>
+              </div>
+            </form>
           </div>
-
-          <div class="form-group full-width">
-            <label>Contraseña</label>
-            <input type="password" formControlName="contrasena" placeholder="********" class="full-width">
-          </div>
-
-          <button type="submit" [disabled]="loginForm.invalid" class="btn-primary full-width">
-            Ingresar
-          </button>
-
-          <button
-            type="button"
-            class="btn-secondary full-width"
-            (click)="goToRegister()">
-            Registrarme
-          </button>
-
-          <button
-            type="button"
-            class="btn-secondary full-width"
-            (click)="goToRecuperar()">
-            ¿Olvidó su contraseña?
-          </button>
-
-        </form>
-
+        </div>
       </div>
     </div>
   `,
