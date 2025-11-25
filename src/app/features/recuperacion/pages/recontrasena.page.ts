@@ -10,24 +10,42 @@ import { NotificationService } from '../../../core/services/notification.service
   selector: 'app-recontrasena',
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <div class="rec-container">
+    <div class="page-bg">
+      <div class="rec-wrapper">
+        <div class="rec-left">
+          <h2 class="rec-title">Cambiar contraseña</h2>
 
-      <h2>Restablecer contraseña</h2>
+          <form [formGroup]="form" (ngSubmit)="validarYRestablecer()" class="rec-form">
+            <div class="form-group">
+              <label for="token">Código de recuperación</label>
+              <input type="text" id="token" formControlName="token" placeholder="Ingresa el código recibido" />
+            </div>
 
-      <form [formGroup]="form" (ngSubmit)="validarYRestablecer()">
+            <div class="form-group">
+              <label for="nueva">Contraseña</label>
+              <input type="password" id="nueva" formControlName="nueva" placeholder="Ingresar contraseña" />
+            </div>
 
-        <label>Token de recuperación</label>
-        <input type="text" formControlName="token">
+            <div class="form-group">
+              <label for="repetir">Confirmar contraseña</label>
+              <input type="password" id="repetir" formControlName="repetir" placeholder="Repetir contraseña" />
+            </div>
 
-        <label>Nueva contraseña</label>
-        <input type="password" formControlName="nueva">
+            <button type="submit" class="btn-primary" [disabled]="form.invalid">
+              Confirmar
+            </button>
 
-        <label>Repetir contraseña</label>
-        <input type="password" formControlName="repetir">
+            <div class="form-links">
+              <a (click)="irAlInicio()">&lt; Cancelar</a>
+            </div>
+          </form>
+        </div>
 
-        <button type="submit">Validar token y actualizar contraseña</button>
-      </form>
-
+        <div class="rec-right">
+          <img src="img/vocatio-logo.png" alt="Logo VOCATIO" class="vocatio-logo" />
+          <h1 class="vocatio-title">VOCATIO</h1>
+        </div>
+      </div>
     </div>
   `,
   styleUrl: './recontrasena.page.css',
@@ -44,9 +62,9 @@ export class ReContraPageComponent {
 
 
   form = this.fb.group({
-    token: ['', Validators.required],
-    nueva: ['', [Validators.required, Validators.minLength(8)]],
-    repetir: ['', [Validators.required]]
+    token: [''],
+    nueva: [''],
+    repetir: ['']
   });
 
   validarYRestablecer() {
@@ -97,4 +115,9 @@ export class ReContraPageComponent {
       }
     });
   }
+
+  irAlInicio() {
+    this.router.navigate(['/login']);
+  }
+
 }
