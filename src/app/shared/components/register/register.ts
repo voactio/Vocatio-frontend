@@ -135,7 +135,7 @@ export class RegisterComponent {
           'Éxito',
           'Usuario registrado correctamente.'
         );
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       },
       error: err => {
         console.error("ERROR REGISTRO", err)

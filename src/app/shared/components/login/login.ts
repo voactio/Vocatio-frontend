@@ -111,7 +111,7 @@ export class LoginComponent {
             'Inicio de sesión exitoso'
           );
           console.log("LOGIN OK", resp);
-          this.router.navigate(['/perfil']);
+          this.router.navigate(['/home']);
         },
 
       error: err => {

@@ -1,0 +1,321 @@
+<div class="detail-container" *ngIf="!loading() && carreraDetail()">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="logo">Vocatio</div>
+      <ul class="nav-links">
+        <li><a href="/home">Inicio</a></li>
+        <li><a href="/carreras" class="active">Carreras</a></li>
+        <li><a href="/test-vocacional">Test Vocacional</a></li>
+        <li><a href="/perfil">Mi Perfil</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Back Button -->
+    <button class="btn-back" (click)="goBack()">
+      ← Volver a Carreras
+    </button>
+
+    <!-- Header -->
+    <div class="detail-header">
+      <div class="header-left">
+        <h1>{{ carreraDetail()?.nombre }}</h1>
+        <div class="header-badges">
+          <span class="badge badge-primary" *ngIf="carreraDetail()?.especializacion">
+            {{ carreraDetail()?.especializacion }}
+          </span>
+          <span class="badge badge-duration">{{ carreraDetail()?.duracionAnios }} AÑOS</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="btn-favorite">⭐ Favorito</button>
+        <button class="btn-discard">✕ Descartar</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.active]="activeTab === 'resumen'"
+        (click)="setActiveTab('resumen')">
+        Resumen
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab === 'universidades'"
+        (click)="setActiveTab('universidades')">
+        Universidades
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab === 'recursos'"
+        (click)="setActiveTab('recursos')">
+        Recursos
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab === 'testimonios'"
+        (click)="setActiveTab('testimonios')">
+        Testimonios
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Resumen Tab -->
+      <div *ngIf="activeTab === 'resumen'" class="tab-panel">
+        <div class="content-grid">
+          <div class="main-content">
+            <!-- Descripción -->
+            <section class="detail-section">
+              <h2>📝 Descripción</h2>
+              <p>{{ carreraDetail()?.descripcion }}</p>
+            </section>
+
+            <!-- Habilidades Desarrolladas -->
+            <section class="detail-section" *ngIf="carreraDetail()?.habilidades && carreraDetail()!.habilidades!.length > 0">
+              <h2>🎯 Habilidades Desarrolladas</h2>
+              <div class="tags-list">
+                <span class="tag-blue" *ngFor="let habilidad of carreraDetail()?.habilidades">
+                  {{ habilidad }}
+                </span>
+              </div>
+            </section>
+
+            <!-- Campos de Trabajo -->
+            <section class="detail-section" *ngIf="carreraDetail()?.camposTrabajo && carreraDetail()!.camposTrabajo!.length > 0">
+              <h2>🏢 Campos de Trabajo</h2>
+              <ul class="work-fields-list">
+                <li *ngFor="let campo of carreraDetail()?.camposTrabajo">{{ campo }}</li>
+              </ul>
+            </section>
+
+            <!-- Principales Cursos -->
+            <section class="detail-section" *ngIf="carreraDetail()?.cursosImportantes && carreraDetail()!.cursosImportantes!.length > 0">
+              <h2>📚 Principales Cursos</h2>
+              <div class="courses-grid">
+                <span class="course-badge" *ngFor="let curso of carreraDetail()?.cursosImportantes">
+                  {{ curso }}
+                </span>
+              </div>
+            </section>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <!-- Información Clave -->
+            <div class="info-card">
+              <h3>📊 Información Clave</h3>
+              <div class="info-item">
+                <span class="info-label">Duración</span>
+                <span class="info-value">{{ carreraDetail()?.duracionAnios }} años</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Modalidad</span>
+                <span class="info-value">{{ carreraDetail()?.modalidad || 'N/A' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Salario Promedio</span>
+                <span class="info-value">{{ carreraDetail()?.rangoSalarioPromedio }}</span>
+              </div>
+            </div>
+
+            <!-- Video Introductorio -->
+            <div class="video-card" *ngIf="carreraDetail()?.videoUrl">
+              <h3>🎥 Video Introductorio</h3>
+              <div class="video-placeholder">
+                <iframe
+                  [src]="carreraDetail()?.videoUrl"
+                  frameborder="0"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Universidades Tab -->
+      <div *ngIf="activeTab === 'universidades'" class="tab-panel">
+        <!-- Loading -->
+        <div *ngIf="loadingUniversidades()" class="loading-tab">
+          <div class="spinner-small"></div>
+          <p>Cargando universidades...</p>
+        </div>
+
+        <!-- Contenido -->
+        <div *ngIf="!loadingUniversidades() && universidades()">
+          <h2 class="tab-title">Universidades que ofrecen {{ universidades()?.nombreCarrera }}</h2>
+
+          <div class="universidades-grid">
+            <div *ngFor="let uni of universidades()?.universidades" class="universidad-card">
+              <h3 class="uni-nombre">{{ uni.nombreUniversidad }}</h3>
+
+              <div class="uni-info">
+                <div class="uni-info-item">
+                  <span class="uni-icon">📍</span>
+                  <div>
+                    <span class="uni-label">Ubicación:</span>
+                    <span class="uni-value">{{ uni.ubicacion }}</span>
+                  </div>
+                </div>
+
+                <div class="uni-info-item">
+                  <span class="uni-icon">⏱️</span>
+                  <div>
+                    <span class="uni-label">Duración:</span>
+                    <span class="uni-value">{{ uni.duracionAnios }} años</span>
+                  </div>
+                </div>
+
+                <div class="uni-info-item">
+                  <span class="uni-icon">💰</span>
+                  <div>
+                    <span class="uni-label">Costo:</span>
+                    <span class="uni-value">S/ {{ uni.costoPorAnio }} por año</span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn-uni-info" (click)="abrirInfoUniversidad(uni)">
+                Más información
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty state si no hay universidades -->
+          <div *ngIf="universidades() && universidades()!.universidades.length === 0" class="empty-tab">
+            <p>🏫 No se encontraron universidades para esta carrera</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recursos Tab -->
+      <div *ngIf="activeTab === 'recursos'" class="tab-panel">
+        <!-- Loading state -->
+        <div *ngIf="loadingRecursos()" class="loading-tab">
+          <div class="spinner-small"></div>
+          <p>Cargando recursos...</p>
+        </div>
+
+        <!-- Contenido de recursos -->
+        <div *ngIf="!loadingRecursos() && recursos()">
+          <h2 class="tab-title">📚 Recursos Digitales</h2>
+          <p class="recursos-intro">Explora materiales educativos, guías y contenido multimedia sobre {{ carreraDetail()?.nombre }}</p>
+
+          <!-- Recursos Digitales (cards grandes) -->
+          <div class="recursos-grid" *ngIf="recursos() && recursos()!.length > 0">
+            <div
+              *ngFor="let recurso of recursos()"
+              class="recurso-card"
+              [ngClass]="getRecursoClass(recurso.tipoRecurso)">
+              <div class="recurso-icon-large">{{ getRecursoIcon(recurso.tipoRecurso) }}</div>
+              <div class="recurso-content">
+                <h3 class="recurso-titulo">{{ recurso.titulo }}</h3>
+                <span class="recurso-badge">{{ recurso.tipoRecurso }}</span>
+                <p class="recurso-autor" *ngIf="recurso.autor">{{ recurso.autor }}</p>
+              </div>
+              <button class="btn-recurso-acceder" (click)="abrirRecurso(recurso)">
+                Acceder
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty state si no hay recursos -->
+          <div *ngIf="!recursos() || recursos()!.length === 0" class="empty-tab">
+            <p>📚 No se encontraron recursos para esta carrera</p>
+          </div>
+
+          <!-- Recursos Adicionales -->
+          <div class="recursos-adicionales" *ngIf="recursos() && recursos()!.length > 0">
+            <h3 class="adicionales-title">🔗 Recursos Adicionales</h3>
+            <div class="adicionales-grid">
+              <div class="adicional-item">
+                📊 Estadísticas Laborales
+              </div>
+              <div class="adicional-item">
+                💼 Ofertas de Trabajo
+              </div>
+              <div class="adicional-item">
+                📚 Bibliografía Recomendada
+              </div>
+              <div class="adicional-item">
+                🏘️ Comunidades Profesionales
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonios Tab -->
+      <div *ngIf="activeTab === 'testimonios'" class="tab-panel">
+        <!-- Loading state -->
+        <div *ngIf="loadingTestimonios()" class="loading-tab">
+          <div class="spinner-small"></div>
+          <p>Cargando testimonios...</p>
+        </div>
+
+        <!-- Contenido de testimonios -->
+        <div *ngIf="!loadingTestimonios() && testimonios()">
+          <h2 class="tab-title">💬 Testimonios de Egresados</h2>
+          <p class="testimonios-intro">Conoce las experiencias de profesionales graduados en {{ carreraDetail()?.nombre }}</p>
+
+          <!-- Agregar testimonio (arriba) -->
+          <div class="agregar-testimonio-inline">
+            <h3 class="agregar-title-inline">✍️ Agregar tu Testimonio</h3>
+            <div class="testimonio-form-inline">
+              <textarea
+                [(ngModel)]="nuevoTestimonio"
+                placeholder="Deja tu testimonio aquí..."
+                rows="4"
+                class="textarea-testimonio"
+                [disabled]="enviandoTestimonio()"></textarea>
+              <button
+                class="btn-enviar-inline"
+                (click)="enviarTestimonio()"
+                [disabled]="!nuevoTestimonio.trim() || enviandoTestimonio()">
+                {{ enviandoTestimonio() ? 'Enviando...' : 'Publicar Testimonio' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Lista de testimonios (vertical) -->
+          <div class="testimonios-lista" *ngIf="testimonios() && testimonios()!.length > 0">
+            <h3 class="testimonios-subtitle">📝 Testimonios Publicados</h3>
+            <div *ngFor="let testimonio of testimonios()" class="testimonio-item">
+              <div class="testimonio-header">
+                <div class="testimonio-avatar">
+                  {{ getInicialesTestimonio(testimonio.nombreUsuario) }}
+                </div>
+                <div class="testimonio-info">
+                  <h4 class="testimonio-nombre">{{ testimonio.nombreUsuario || 'Usuario Anónimo' }}</h4>
+                  <p class="testimonio-universidad" *ngIf="testimonio.universidad">
+                    {{ testimonio.universidad }} • {{ testimonio.promocion || 'Promoción N/A' }}
+                  </p>
+                </div>
+              </div>
+              <p class="testimonio-texto">
+                "{{ testimonio.textoTestimonio }}"
+              </p>
+            </div>
+          </div>
+
+          <!-- Empty state si no hay testimonios -->
+          <div *ngIf="testimonios() && testimonios()!.length === 0" class="empty-testimonios">
+            <p>💬 No hay testimonios publicados aún. ¡Sé el primero en compartir tu experiencia!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="loading()" class="loading-container">
+  <div class="spinner"></div>
+  <p>Cargando información de la carrera...</p>
+</div>

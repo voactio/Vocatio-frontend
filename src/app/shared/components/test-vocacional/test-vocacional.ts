@@ -9,77 +9,138 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="test-container">
-      
-      <div *ngIf="estado() === 'INICIO'" class="card inicio">
-        <h2>Test Vocacional Vocatio</h2>
-        <p>Descubre tu vocación profesional respondiendo a estas preguntas.</p>
-        <div class="instrucciones">
-          <h4>Instrucciones:</h4>
-          <ul>
-            <li>Responde honestamente a cada pregunta.</li>
-            <li>No hay respuestas correctas o incorrectas.</li>
-            <li>El test dura aproximadamente 5 minutos.</li>
+    <div class="test-wrapper">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar-content">
+          <div class="logo">Vocatio</div>
+          <ul class="nav-links">
+            <li><a href="/home">Inicio</a></li>
+            <li><a href="/carreras">Carreras</a></li>
+            <li><a href="/test-vocacional" class="active">Test Vocacional</a></li>
+            <li><a href="/perfil">Mi Perfil</a></li>
           </ul>
         </div>
-        <button (click)="iniciarTest()" class="btn-primary">Comenzar Test</button>
-      </div>
+      </nav>
 
-      <div *ngIf="estado() === 'EN_PROGRESO' && preguntaActual()" class="card pregunta">
-        <div class="progreso-header">
-          <span class="progreso-texto">{{ preguntaActual()!.progreso }}</span>
-          <div class="barra-progreso">
-             <div class="relleno" [style.width]="calcularPorcentaje()"></div>
+      <div class="test-container">
+
+        @if (estado() === 'INICIO') {
+          <div class="inicio-section">
+          <div class="inicio-header">
+            <h1 class="inicio-title">Test Vocacional Vocatio</h1>
+            <p class="inicio-subtitle">Descubre tu vocación profesional respondiendo a estas pregunas</p>
           </div>
-        </div>
-        <h3 class="texto-pregunta">{{ preguntaActual()!.textoPregunta }}</h3>
-        <div class="opciones-lista">
-          <button *ngFor="let opcion of preguntaActual()!.opciones" 
-            (click)="seleccionarOpcion(opcion.id)" class="btn-opcion">
-            <span class="radio-circle"></span> {{ opcion.textoOpcion }}
+
+          <div class="instrucciones-card">
+            <h3 class="instrucciones-title">Instrucciones:</h3>
+            <ul class="instrucciones-lista">
+              <li>Responde honestamente a cada pregunta</li>
+              <li>No hay respuestas correctas o incorrectas</li>
+              <li>El test dura aproximadamente 10 minutos</li>
+              <li>Puedes pausar y continuar más tarde</li>
+            </ul>
+          </div>
+
+          <button (click)="iniciarTest()" class="btn-comenzar">
+            🚀 Comenzar Test
           </button>
         </div>
-      </div>
+      }
 
-      <div *ngIf="estado() === 'FINALIZADO'" class="card final">
-        <h2>¡Excelente Trabajo!</h2>
-        <p>Has completado todas las preguntas del test.</p>
-        <button (click)="verResultados()" class="btn-primary">Ver mis Resultados</button>
-      </div>
+      @if (estado() === 'EN_PROGRESO' && preguntaActual()) {
+        <div class="card pregunta">
+          <div class="progreso-header">
+            <span class="progreso-texto">{{ preguntaActual()!.progreso }}</span>
+            <div class="barra-progreso">
+               <div class="relleno" [style.width]="calcularPorcentaje()"></div>
+            </div>
+          </div>
+          <h3 class="texto-pregunta">{{ preguntaActual()!.textoPregunta }}</h3>
+          <div class="opciones-lista">
+            @for (opcion of preguntaActual()!.opciones; track opcion.id) {
+              <button (click)="seleccionarOpcion(opcion.id)" class="btn-opcion">
+                <span class="radio-circle"></span> {{ opcion.textoOpcion }}
+              </button>
+            }
+          </div>
+        </div>
+      }
 
-      <div *ngIf="estado() === 'RESULTADOS' && resultadosActuales()" class="card resultados">
-        <h2>Tus Resultados</h2>
-        <p class="subtitulo">Basado en tus respuestas, este es tu perfil profesional:</p>
+      @if (estado() === 'FINALIZADO') {
+        <div class="card final">
+          <h2>¡Excelente Trabajo!</h2>
+          <p>Has completado todas las preguntas del test.</p>
+          <button (click)="verResultados()" class="btn-primary">Ver mis Resultados</button>
+        </div>
+      }
 
-        <div class="grafico-container">
-          <h3>Perfil de Intereses (RIASEC)</h3>
-          <div class="grafico-barras">
-            <div *ngFor="let item of resultadosActuales()!.graficoIntereses.puntajes | keyvalue" class="barra-item">
-              <div class="barra-label">{{ item.key }}</div>
-              <div class="barra-track">
-                <div class="barra-fill" [style.width.%]="(item.value * 10)"></div> 
+      @if (estado() === 'RESULTADOS' && resultadosActuales()) {
+        <div class="resultados-wrapper">
+          <!-- Header -->
+          <div class="resultados-header">
+            <h1 class="resultados-title">🎉 ¡Resultados de tu Test Vocacional!</h1>
+            <p class="resultados-subtitle">Descubre las carreras que mejor se adaptan a tu perfil</p>
+          </div>
+
+          <!-- Contenedor de dos columnas -->
+          <div class="resultados-content">
+            <!-- Columna Izquierda: Gráfico -->
+            <div class="grafico-section">
+              <h2 class="section-title">Gráfico de Intereses</h2>
+              <div class="grafico-container">
+                <div class="grafico-placeholder">
+                  <div class="radar-chart">
+                    <!-- Aquí iría el gráfico radar RIASEC -->
+                    <p style="text-align: center; color: #2a63d3; font-weight: 600; margin-top: 100px;">
+                      Gráfico RIASEC (Radar Chart)
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="barra-valor">{{ item.value }}</div>
+            </div>
+
+            <!-- Columna Derecha: Ranking -->
+            <div class="ranking-section">
+              <h2 class="section-title">Ranking de Carreras</h2>
+              <div class="carreras-lista">
+                @for (carrera of resultadosActuales()!.rankingCarreras; track carrera.nombre; let i = $index) {
+                  <div class="carrera-resultado-card">
+                    <div class="carrera-icon">
+                      <span class="icon-numero">{{ i + 1 }}</span>
+                    </div>
+                    <div class="carrera-contenido">
+                      <h3 class="carrera-nombre">{{ carrera.nombre }}</h3>
+                      <p class="carrera-descripcion">{{ carrera.descripcion }}</p>
+                      <span class="carrera-badge">{{ carrera.areaInteres }}</span>
+                    </div>
+                    <div class="carrera-match">
+                      <div class="match-porcentaje">{{ carrera.porcentajeCompatibilidad }}%</div>
+                      <div class="match-label">Compatibilidad</div>
+                      <button class="btn-ver-detalle" (click)="verDetalleCarrera(carrera.id)">Ver Detalle</button>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="ranking-container">
-          <h3>Carreras Recomendadas</h3>
-          <div class="carrera-card" *ngFor="let carrera of resultadosActuales()!.rankingCarreras; let i = index">
-            <div class="rank-number">#{{ i + 1 }}</div>
-            <div class="carrera-info">
-              <h4>{{ carrera.nombre }}</h4>
-              <p>{{ carrera.descripcion }}</p>
-              <span class="tag">{{ carrera.areaInteres }}</span>
-            </div>
-            <div class="match-badge">{{ carrera.porcentajeCompatibilidad }}% Compatible</div>
+          <!-- Botones de Acción -->
+          <div class="acciones-footer">
+            <button class="btn-descargar">
+              📄 Descargar Resultados PDF
+            </button>
+            <button class="btn-comparar">
+              ➕ Comparar Carreras
+            </button>
+            <button class="btn-nuevo-test" (click)="reiniciarTest()">
+              🔄 Realizar Nuevo Test
+            </button>
           </div>
         </div>
-        
-        <button (click)="reiniciarTest()" class="btn-secondary">Realizar Nuevo Test</button>
-      </div>
+      }
 
+    </div>
     </div>
   `,
   styleUrl: './test-vocacional.css'
@@ -87,12 +148,12 @@ import { Router } from '@angular/router';
 export class TestVocacionalComponent {
   private testService = inject(TestService);
   private router = inject(Router);
-  
+
   estado = signal<'INICIO' | 'EN_PROGRESO' | 'FINALIZADO' | 'RESULTADOS'>('INICIO');
-  
+
   preguntaActual = signal<Pregunta | null>(null);
   resultadosActuales = signal<ResultadoTest | null>(null);
-  
+
   // Guardamos el ID de la sesión actual que nos da el backend
   sessionId = signal<number | null>(null);
 
@@ -156,11 +217,15 @@ export class TestVocacionalComponent {
     this.resultadosActuales.set(null);
   }
 
+  verDetalleCarrera(carreraId: number) {
+    this.router.navigate(['/carreras', carreraId]);
+  }
+
   calcularPorcentaje() {
     if (!this.preguntaActual()) return '0%';
     // El backend nos manda "Pregunta X de Y". Parseamos eso.
     try {
-      const texto = this.preguntaActual()!.progreso; 
+      const texto = this.preguntaActual()!.progreso;
       const partes = texto.split(' '); // ["Pregunta", "1", "de", "5"]
       const actual = parseInt(partes[1]);
       const total = parseInt(partes[3]);
