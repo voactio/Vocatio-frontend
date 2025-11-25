@@ -149,8 +149,13 @@ import { finalize } from 'rxjs';
               </div>
 
               <div class="form-group">
-                <label>Carrera ID</label>
-                <input type="number" formControlName="carreraId" />
+                <label>Carrera (opcional)</label>
+                <select formControlName="carreraId">
+                  <option [ngValue]="null">-- Seleccionar carrera (opcional) --</option>
+                  <option *ngFor="let c of carreras" [ngValue]="c.id">{{ c.nombre }}</option>
+                </select>
+
+                <div *ngIf="cargandoCarreras" class="small-muted">Cargando carreras...</div>
               </div>
 
               <div class="form-group">
@@ -184,43 +189,6 @@ import { finalize } from 'rxjs';
       </div>
     </div>
   `,
-  /*template: `
-    <h2>Mi Perfil</h2>
-
-    <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
-
-      <label>Nombre</label>
-      <input type="text" formControlName="nombre">
-
-      <label>Nivel Educativo</label>
-      <input type="text" formControlName="nivelEducativo">
-
-      <label>Contraseña (opcional)</label>
-      <input type="password" formControlName="contrasena">
-
-      <label>Carrera ID</label>
-      <input type="number" formControlName="carreraId">
-
-      <label>URL Imagen Perfil</label>
-      <input type="text" formControlName="urlImagenPerfil">
-
-      <button type="submit" [disabled]="perfilForm.invalid">Guardar Cambios</button>
-    </form>
-
-    <div *ngIf="mensaje" style="color: green;">{{ mensaje }}</div>
-    <div *ngIf="error" style="color: red;">{{ error }}</div>
-
-    <hr>
-
-    <!-- BOTÓN PARA IR AL TEST VOCACIONAL -->
-    <button (click)="irAlTestVocacional()" class="btn-test">
-      Ir al Test Vocacional
-    </button>
-    <!-- BOTÓN PARA CERRAR SESION -->
-    <button (click)="cerrarSesion()" class="btn-logout">
-      Cerrar sesión
-    </button>
-  `,*/
   styleUrl: './perfil.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
