@@ -1,134 +1,115 @@
-/* Fuente global */
-* {
-  font-family: 'Montserrat', 'Segoe UI', sans-serif;
-}
-
-.login-container {
-  min-height: calc(100vh - 100px);
+/* Fondo exterior (toda la vista) */
+.page-bg {
+  background-color: #2A63D3;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #f5f7fb;
 }
 
-/* Card */
-.login-card {
-  width: 100%;
-  max-width: 420px;
-  background: #ffffff;
-  padding: 3rem 2rem;
+/* Tarjeta blanca con bordes redondeados (login-wrapper) */
+.login-wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;          /* vuelve a blanco */
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-  text-align: center;
-  min-height: 520px;
+  padding: 40px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #333;
 }
 
-/* Encabezado */
-.login-header {
-  margin-bottom: 2rem;
+/* Columnas */
+.login-left, .login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.logo-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+.login-left {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding-right: 20px;
 }
 
-.login-header h2 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: .3rem;
+/* Logo y título */
+.vocatio-logo {
+  width: 200px;
+  margin-bottom: 20px;
 }
 
-.login-header p {
-  font-size: 0.95rem;
-  color: #666;
+.vocatio-title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #1a4db3; /* azul del branding dentro de la tarjeta */
 }
 
 /* Formulario */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  width: 100%;
-  max-width: 320px;
-  margin: 0 auto;
+.login-form-container {
+  width: 90%;
+  max-width: 350px;
 }
 
-.app-title {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #3a74d9;
-  margin: 0.1rem 0 0.5rem;
-  letter-spacing: 1px;
+.login-form-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
 }
 
-/* Clase general para ancho uniforme */
-.full-width {
-  width: 100%;
-}
-
-/* Form-group */
 .form-group {
-  width: 94%;
-  text-align: left;
+  margin-bottom: 15px;
 }
 
-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 6px;
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background-color: #ffffff;
   color: #333;
 }
 
-input {
-  padding: 10px;
-  font-size: 0.95rem;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  transition: 0.2s;
+.form-group input::placeholder {
+  color: #999;
 }
 
-input:focus {
-  outline: none;
-  border-color: #4e8cff;
-  box-shadow: 0 0 0 3px rgba(78,140,255,0.2);
+/* Enlaces y botón */
+.form-links {
+  margin: 10px 0;
+  text-align: right;
 }
 
-/* Botones */
-.btn-primary,
-.btn-secondary {
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
+.form-links a {
+  color: #1a4db3;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
-  width: 100%;
+  text-decoration: none;
+}
+
+.form-links a:hover {
+  text-decoration: underline;
 }
 
 .btn-primary {
-  background: #4e8cff;
-  color: white;
+  width: 100%;
+  padding: 10px;
+  background-color: #1a4db3;
+  color: #ffffff;
   border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: #3a74d9;
-  transform: translateY(-2px);
-}
-
-.btn-primary:disabled {
-  background: #aac4fb;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #f0f0f0;
-  color: #333;
-  border: 2px solid #ddd;
-}
-
-.btn-secondary:hover {
-  background: #e6e6e6;
+.btn-primary:hover {
+  background-color: #17429a;
 }
