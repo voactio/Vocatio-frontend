@@ -1,1 +1,0 @@
-import{a as o}from"./chunk-56POXEDK.js";import{Ga as i,n as t,r as e}from"./chunk-NKNYKZYW.js";var a=class r{http=e(i);apiUrl=`${o.apiUrl}/carreras`;getOpciones(){return this.http.get(`${this.apiUrl}/opciones`)}static \u0275fac=function(p){return new(p||r)};static \u0275prov=t({token:r,factory:r.\u0275fac,providedIn:"root"})};export{a};
