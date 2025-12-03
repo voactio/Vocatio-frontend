@@ -6,6 +6,7 @@ import { CarreraService } from '../../../core/services/carrera.service';
 import { UniversidadService } from '../../../core/services/universidad.service';
 import { RecursoService } from '../../../core/services/recurso.service';
 import { TestimonioService } from '../../../core/services/testimonio.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CarreraDetail } from '../../../core/models/carrera.model';
 
 @Component({
@@ -20,6 +21,7 @@ export class CarreraDetailPage implements OnInit {
   private universidadService = inject(UniversidadService);
   private recursoService = inject(RecursoService);
   private testimonioService = inject(TestimonioService);
+  private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -185,18 +187,26 @@ export class CarreraDetailPage implements OnInit {
       return;
     }
 
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser) {
+      alert('Debes iniciar sesión para enviar un testimonio');
+      return;
+    }
+
     this.enviandoTestimonio.set(true);
 
     const request = {
+      idUsuario: currentUser.id,
       textoTestimonio: this.nuevoTestimonio.trim()
     };
 
     this.testimonioService.crearTestimonio(this.carreraId, request).subscribe({
       next: (response) => {
         console.log('Testimonio creado exitosamente:', response);
-        alert('¡Gracias por compartir tu testimonio! Será revisado antes de publicarse.');
         this.nuevoTestimonio = '';
         this.enviandoTestimonio.set(false);
+        // Recargar la lista de testimonios
+        this.loadTestimonios();
       },
       error: (err) => {
         console.error('Error al crear testimonio:', err);

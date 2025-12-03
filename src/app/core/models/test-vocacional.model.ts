@@ -28,6 +28,7 @@ export interface GraficoInteres {
 }
 
 export interface ResultadoTest {
+  idResultado?: number; // ID del resultado guardado en BD
   graficoIntereses: GraficoInteres;
   rankingCarreras: CarreraAfin[];
 }
@@ -44,4 +45,19 @@ export interface TestHistoryItem {
   fecha: string;
   intento: number;
   topCarreras: CarreraResult[];
+}
+
+export interface ComparacionCarreras {
+  carrera1: CarreraComparacion;
+  carrera2: CarreraComparacion;
+}
+
+export interface CarreraComparacion {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  duracionAnios: number;
+  modalidad: string;
+  rangoSalarioPromedio: string;
+  areaInteres: string;
 }
