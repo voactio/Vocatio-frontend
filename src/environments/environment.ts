@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://vocatio-api-latest.onrender.com',
+  production: false,
+  apiUrl: 'http://localhost:8080/api/v1',
   //apiKey: 'your-api-key'
 };
