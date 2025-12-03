@@ -14,5 +14,6 @@ export interface Testimonio {
 }
 
 export interface CrearTestimonioRequest {
+  idUsuario: string;
   textoTestimonio: string;
 }

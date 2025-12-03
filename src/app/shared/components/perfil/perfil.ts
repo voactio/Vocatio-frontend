@@ -91,7 +91,7 @@ import { signal } from '@angular/core';
 
             <div class="section">
               <h3>🎯 Resultados del Último Test</h3>
-              
+
               @if (ultimoTest(); as test) {
                   <p class="section-subtitle">Intento #{{ test.intento }} - {{ test.fecha | date:'short' }}</p>
                   <div class="badges-container">
@@ -180,7 +180,7 @@ import { signal } from '@angular/core';
             <div class="section-header">
               <h2>📋 Historial de Tests</h2>
             </div>
-            
+
             @if (historial().length > 0) {
                 <div class="historial-list">
                     @for (test of historial(); track test.idResultado) {
@@ -194,10 +194,11 @@ import { signal } from '@angular/core';
                                 <ul>
                                     @for (carrera of test.topCarreras; track carrera.id) {
                                         <li>
-                                            <strong>{{ carrera.porcentajeCompatibilidad }}%</strong> - {{ carrera.nombre }}
+                                            <strong>{{ Math.round(carrera.porcentajeCompatibilidad) }}%</strong> - {{ carrera.nombre }}
                                         </li>
                                     }
                                 </ul>
+                                <button class="btn-ver-resultados" (click)="verResultadosCompletos(test.idResultado)">Ver Resultados Completos</button>
                             </div>
                         </div>
                     }
@@ -238,6 +239,9 @@ export class PerfilComponent {
   historial = signal<TestHistoryItem[]>([]);
   ultimoTest = signal<TestHistoryItem | null>(null);
 
+  // Exponer Math para el template
+  Math = Math;
+
   carreras: CarreraOption[] = [];
   cargandoCarreras = false;
   submitting = false;
@@ -246,7 +250,7 @@ export class PerfilComponent {
   usuarioId!: string;
   seccionActiva: 'resumen' | 'editar' | 'historial' | 'favoritas' = 'resumen';
   userData: any;
-  
+
 
   perfilForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -368,8 +372,11 @@ export class PerfilComponent {
     this.seccionActiva = seccion;
   }
 
-  verResultadosCompletos() {
-    this.router.navigate(['/test-vocacional']);
+  verResultadosCompletos(idResultado: number) {
+    // Navegar al test-vocacional con el ID del resultado para mostrar la vista completa
+    this.router.navigate(['/test-vocacional'], {
+      queryParams: { resultadoId: idResultado }
+    });
   }
 
 }

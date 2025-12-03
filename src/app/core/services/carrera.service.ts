@@ -80,6 +80,21 @@ export class CarreraService {
   }
 
   /**
+   * Comparar dos carreras
+   */
+  compararCarreras(idUsuario: string, idResultado: number, idCarrera1: number, idCarrera2: number): Observable<any> {
+    const body = {
+      idUsuario,
+      idResultado,
+      idCarrera1,
+      idCarrera2
+    };
+
+    // Ruta correcta: /api/v1/comparar-carreras (context-path + @RequestMapping)
+    return this.http.post(`${environment.apiUrl}/comparar-carreras`, body);
+  }
+
+  /**
    * Limpiar el detalle de carrera
    */
   clearDetail(): void {
